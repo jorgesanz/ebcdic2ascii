@@ -68,13 +68,13 @@ public class BatchConfiguration {
 	}
 
 	@Bean
-	public FlatFileItemWriter<LineContent> writer(Resource outputResource)
+	public FlatFileItemWriter<LineContent> writer()
 	{
 		//Create writer instance
 		FlatFileItemWriter<LineContent> writer = new FlatFileItemWriter<>();
 
 		//Set output file location
-		writer.setResource(outputResource);
+		writer.setResource(outputResource());
 
 		//All job repetitions should "append" to same output file
 		writer.setAppendAllowed(true);
@@ -106,12 +106,12 @@ public class BatchConfiguration {
 	}
 
 	@Bean
-	public Step step1(FlatFileItemWriter<LineContent> writer) {
+	public Step step1() {
 		return stepBuilderFactory.get("step1")
 			.<LineContent, LineContent> chunk(10)
 			.reader(reader())
 			.processor(processor())
-			.writer(writer)
+			.writer(writer())
 			.build();
 	}
 	// end::jobstep[]
