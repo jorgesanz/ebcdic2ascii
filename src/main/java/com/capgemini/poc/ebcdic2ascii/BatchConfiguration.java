@@ -5,7 +5,12 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.launch.support.SimpleJobLauncher;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.integration.launch.JobLaunchingGateway;
+import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
@@ -18,6 +23,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.task.SyncTaskExecutor;
+import org.springframework.integration.dsl.IntegrationFlow;
+import org.springframework.integration.dsl.IntegrationFlows;
+import org.springframework.integration.dsl.Pollers;
+import org.springframework.integration.file.dsl.Files;
+import org.springframework.integration.file.filters.SimplePatternFileListFilter;
+import org.springframework.integration.handler.LoggingHandler;
+
+import java.io.File;
+import java.io.FileReader;
 
 // tag::setup[]
 @Configuration
@@ -30,9 +45,9 @@ public class BatchConfiguration {
 	@Autowired
 	public StepBuilderFactory stepBuilderFactory;
 
-	@Value( "${source.location}" )
+	@Value("${source.location}")
 	private String sourceLocation;
-	@Value( "${target.location}" )
+	@Value("${target.location}")
 	private String targetLocation;
 	@Value("${target.format}")
 	private String targetFormat;
@@ -43,33 +58,40 @@ public class BatchConfiguration {
 
 	// end::setup[]
 
-	// tag::readerwriterprocessor[]
+	//	// tag::readerwriterprocessor[]
+//	@Bean
+//	public FlatFileItemReader<LineContent> reader() {
+//		return new FlatFileItemReaderBuilder<LineContent>()
+//				.name("ebcdicReader")
+//				.resource(new FileSystemResource(sourceLocation))
+//				.delimited()
+//				.names(new String[]{"content"})
+//				.fieldSetMapper(new BeanWrapperFieldSetMapper<LineContent>() {{
+//					setTargetType(LineContent.class);
+//				}})
+//				.build();
+//	}
+
 	@Bean
-	public FlatFileItemReader<LineContent> reader() {
-		return new FlatFileItemReaderBuilder<LineContent>()
-			.name("ebcdicReader")
-			.resource(new FileSystemResource(sourceLocation))
-			.delimited()
-			.names(new String[]{"content"})
-			.fieldSetMapper(new BeanWrapperFieldSetMapper<LineContent>() {{
-				setTargetType(LineContent.class);
-			}})
-			.build();
+	@StepScope
+	public ItemReader sampleReader(@Value("#{jobParameters[input.file.name]}") String resource) {
+		FlatFileItemReader flatFileItemReader = new FlatFileItemReader();
+		flatFileItemReader.setResource(new FileSystemResource(resource));
+		return flatFileItemReader;
 	}
 
 	@Bean
 	public Ebcdic2AsciiProcessor processor() {
-		return new Ebcdic2AsciiProcessor(sourceFormat,targetFormat);
+		return new Ebcdic2AsciiProcessor(sourceFormat, targetFormat);
 	}
 
 	@Bean
-	public Resource outputResource(){
+	public Resource outputResource() {
 		return new FileSystemResource(targetLocation);
 	}
 
 	@Bean
-	public FlatFileItemWriter<LineContent> writer()
-	{
+	public FlatFileItemWriter<LineContent> writer() {
 		//Create writer instance
 		FlatFileItemWriter<LineContent> writer = new FlatFileItemWriter<>();
 
@@ -85,7 +107,7 @@ public class BatchConfiguration {
 				setDelimiter(",");
 				setFieldExtractor(new BeanWrapperFieldExtractor<LineContent>() {
 					{
-						setNames(new String[] {/* "id",*/ "content"});
+						setNames(new String[]{/* "id",*/ "content"});
 					}
 				});
 			}
@@ -96,23 +118,54 @@ public class BatchConfiguration {
 
 	// tag::jobstep[]
 	@Bean
-	public Job importUserJob(JobCompletionNotificationListener listener, Step step1) {
+	public Job transformationJob(JobCompletionNotificationListener listener, Step step1) {
 		return jobBuilderFactory.get("importUserJob")
-			.incrementer(new RunIdIncrementer())
-			.listener(listener)
-			.flow(step1)
-			.end()
-			.build();
+				.incrementer(new RunIdIncrementer())
+				.listener(listener)
+				.flow(step1)
+				.end()
+				.build();
 	}
 
 	@Bean
-	public Step step1() {
+	public Step step1(ItemReader fileReader) {
 		return stepBuilderFactory.get("step1")
-			.<LineContent, LineContent> chunk(10)
-			.reader(reader())
-			.processor(processor())
-			.writer(writer())
-			.build();
+				.<LineContent, LineContent>chunk(10)
+				.reader(fileReader)
+				.processor(processor())
+				.writer(writer())
+				.build();
 	}
 	// end::jobstep[]
+
+
+	@Bean
+	public FileMessageToJobRequest fileMessageToJobRequest(Job job) {
+		FileMessageToJobRequest fileMessageToJobRequest = new FileMessageToJobRequest();
+		fileMessageToJobRequest.setFileParameterName("input.file.name");
+		fileMessageToJobRequest.setJob(job);
+		return fileMessageToJobRequest;
+	}
+
+	@Bean
+	public JobLaunchingGateway jobLaunchingGateway(JobRepository jobRepository) {
+		SimpleJobLauncher simpleJobLauncher = new SimpleJobLauncher();
+		simpleJobLauncher.setJobRepository(jobRepository);
+		simpleJobLauncher.setTaskExecutor(new SyncTaskExecutor());
+		JobLaunchingGateway jobLaunchingGateway = new JobLaunchingGateway(simpleJobLauncher);
+
+		return jobLaunchingGateway;
+	}
+
+	@Bean
+	public IntegrationFlow integrationFlow(JobLaunchingGateway jobLaunchingGateway, Job job) {
+		return IntegrationFlows.from(Files.inboundAdapter(new File("C:\\Users\\jsanzbri\\Documents\\git\\iberdrola-poc\\input")).
+						filter(new SimplePatternFileListFilter("*.ebcdi")),
+				c -> c.poller(Pollers.fixedRate(1000).maxMessagesPerPoll(1))).
+				handle(job).
+				handle(jobLaunchingGateway).
+				log(LoggingHandler.Level.WARN, "headers.id + ': ' + payload").
+				get();
+
+	}
 }
