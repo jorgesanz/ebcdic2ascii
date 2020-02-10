@@ -24,9 +24,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.task.SyncTaskExecutor;
+import org.springframework.integration.core.MessageSource;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.integration.dsl.Pollers;
+import org.springframework.integration.file.FileReadingMessageSource;
 import org.springframework.integration.file.dsl.Files;
 import org.springframework.integration.file.filters.SimplePatternFileListFilter;
 import org.springframework.integration.handler.LoggingHandler;
@@ -73,8 +75,20 @@ public class BatchConfiguration {
 //	}
 
 	@Bean
+	public FlatFileItemReader<LineContent> reader() {
+		return new FlatFileItemReaderBuilder<LineContent>()
+				.name("ebcdicReader")
+				.resource(new FileSystemResource(sourceLocation+"\\sample-data.ebcdi"))
+				.delimited()
+				.names(new String[]{"content"})
+				.fieldSetMapper(new BeanWrapperFieldSetMapper<LineContent>() {{
+					setTargetType(LineContent.class);
+				}})
+				.build();
+	}
+	@Bean
 	@StepScope
-	public ItemReader sampleReader(@Value("#{jobParameters[input.file.name]}") String resource) {
+	public ItemReader sampleReader(@Value("#{jobParameters[input.file.name]}") String resource)  {
 		FlatFileItemReader flatFileItemReader = new FlatFileItemReader();
 		flatFileItemReader.setResource(new FileSystemResource(resource));
 		return flatFileItemReader;
@@ -118,20 +132,20 @@ public class BatchConfiguration {
 
 	// tag::jobstep[]
 	@Bean
-	public Job transformationJob(JobCompletionNotificationListener listener, Step step1) {
+	public Job transformationJob() {
 		return jobBuilderFactory.get("importUserJob")
 				.incrementer(new RunIdIncrementer())
-				.listener(listener)
-				.flow(step1)
+//				.listener(listener)
+				.flow(step1())
 				.end()
 				.build();
 	}
 
 	@Bean
-	public Step step1(ItemReader fileReader) {
+	public Step step1() {
 		return stepBuilderFactory.get("step1")
 				.<LineContent, LineContent>chunk(10)
-				.reader(fileReader)
+				.reader(reader())
 				.processor(processor())
 				.writer(writer())
 				.build();
@@ -140,10 +154,10 @@ public class BatchConfiguration {
 
 
 	@Bean
-	public FileMessageToJobRequest fileMessageToJobRequest(Job job) {
+	public FileMessageToJobRequest fileMessageToJobRequest() {
 		FileMessageToJobRequest fileMessageToJobRequest = new FileMessageToJobRequest();
 		fileMessageToJobRequest.setFileParameterName("input.file.name");
-		fileMessageToJobRequest.setJob(job);
+		fileMessageToJobRequest.setJob(transformationJob());
 		return fileMessageToJobRequest;
 	}
 
@@ -157,15 +171,21 @@ public class BatchConfiguration {
 		return jobLaunchingGateway;
 	}
 
-	@Bean
-	public IntegrationFlow integrationFlow(JobLaunchingGateway jobLaunchingGateway, Job job) {
-		return IntegrationFlows.from(Files.inboundAdapter(new File("C:\\Users\\jsanzbri\\Documents\\git\\iberdrola-poc\\input")).
-						filter(new SimplePatternFileListFilter("*.ebcdi")),
-				c -> c.poller(Pollers.fixedRate(1000).maxMessagesPerPoll(1))).
-				handle(job).
-				handle(jobLaunchingGateway).
-				log(LoggingHandler.Level.WARN, "headers.id + ': ' + payload").
-				get();
 
+	@Bean
+	public IntegrationFlow integrationFlow(JobLaunchingGateway jobLaunchingGateway) {
+
+		return IntegrationFlows.from(sourceDirectory(), configurer -> configurer.poller(Pollers.fixedDelay(1000)))
+				.filter(new SimplePatternFileListFilter("*.ebcdi")).
+						handle(fileMessageToJobRequest()).
+//						handle(jobLaunchingGateway).
+				get();
+	}
+
+	@Bean
+	public MessageSource<File> sourceDirectory() {
+		FileReadingMessageSource messageSource = new FileReadingMessageSource();
+		messageSource.setDirectory(new File(sourceLocation));
+		return messageSource;
 	}
 }
