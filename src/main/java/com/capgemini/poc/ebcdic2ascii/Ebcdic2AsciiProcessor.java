@@ -2,44 +2,32 @@ package com.capgemini.poc.ebcdic2ascii;
 
 import org.springframework.batch.item.ItemProcessor;
 
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
+
 public class Ebcdic2AsciiProcessor implements ItemProcessor<LineContent, LineContent> {
 
-    // Translate Ebcdic char to ASCII
-    final static char[] E2A_table = new char[] {
-            //        0    1    2    3    4    5    6    7    8    9    A    B    C    D    E    F
-            /* 0 */ '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?',
-            /* 1 */ '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?',
-            /* 2 */ '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?',
-            /* 3 */ '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?',
-            /* 4 */ ' ', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '.', '<', '(', '+', '?',
-            /* 5 */ '&', '?', '?', '?', '?', '?', '?', '?', '?', '?', '!', '$', '*', ')', ';', '?',
-            /* 6 */ '-', '/', '?', '?', '?', '?', '?', '?', '?', '?', '|', ',', '%', '_', '>', '?',
-            /* 7 */ '?', '?', '?', '?', '?', '?', '?', '?', '?', '`', ':', '#', '@', '\'', '=', '"',
-            /* 8 */ '?', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', '?', '?', '?', '?', '?', '?',
-            /* 9 */ '?', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', '?', '?', '?', '?', '?', '?',
-            /* A */ '?', '~', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '?', '?', '?', '?', '?', '?',
-            /* B */ '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?',
-            /* C */ '{', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', '?', '?', '?', '?', '?', '?',
-            /* D */ '}', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', '?', '?', '?', '?', '?', '?',
-            /* E */ '\\', '?', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '?', '?', '?', '?', '?', '?',
-            /* F */ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '?', '?', '?', '?', '?', '?'};
+    private CharsetDecoder decoder;
+    private CharsetEncoder encoder;
 
-    final static int StripSign = 0xFF;  // to strip off leading sign bits
+    public Ebcdic2AsciiProcessor( String sourceFormat, String targetFormat) {
+        Charset charset_in = Charset.forName(targetFormat);
+        Charset charset_out = Charset.forName(sourceFormat);
+        this.decoder = charset_out.newDecoder();
+        this.encoder = charset_in.newEncoder();
+    }
 
     @Override
-    public LineContent process(LineContent ebcdic) throws Exception {
-//        StringBuffer sb = new StringBuffer(ebcdic.length);
-//        for(int i=0; i < ebcdic.length; i++)
-//            sb.append(E2A_table[ebcdic[i] & StripSign]);
-//        return ebcdic;
-        LineContent lineContent = new LineContent();
-        char[] sth = ebcdic.getContent().toCharArray();
-                StringBuffer sb = new StringBuffer(sth.length);
-        for(int i=0; i < sth.length; i++)
-            sb.append(E2A_table[sth[i] & StripSign]);
+    public LineContent process(LineContent lineContent) throws Exception {
 
-        lineContent.setContent(sb.toString());
+        CharBuffer uCharBuffer = CharBuffer.wrap(lineContent.getContent());
+        ByteBuffer bbuf = encoder.encode(uCharBuffer);
+        CharBuffer cbuf = decoder.decode(bbuf);
+        lineContent.setContent(cbuf.toString());
         return lineContent;
-//        return sb.toString();
+
     }
 }

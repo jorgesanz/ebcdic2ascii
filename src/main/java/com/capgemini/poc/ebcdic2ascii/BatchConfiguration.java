@@ -16,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
@@ -32,10 +30,16 @@ public class BatchConfiguration {
 	@Autowired
 	public StepBuilderFactory stepBuilderFactory;
 
-	@Value( "${source}" )
-	private String source;
-	@Value( "${target}" )
-	private String target;
+	@Value( "${source.location}" )
+	private String sourceLocation;
+	@Value( "${target.location}" )
+	private String targetLocation;
+	@Value("${target.format}")
+	private String targetFormat;
+
+	@Value("${source.format}")
+	private String sourceFormat;
+
 
 	// end::setup[]
 
@@ -44,7 +48,7 @@ public class BatchConfiguration {
 	public FlatFileItemReader<LineContent> reader() {
 		return new FlatFileItemReaderBuilder<LineContent>()
 			.name("ebcdicReader")
-			.resource(new FileSystemResource(source))
+			.resource(new FileSystemResource(sourceLocation))
 			.delimited()
 			.names(new String[]{"content"})
 			.fieldSetMapper(new BeanWrapperFieldSetMapper<LineContent>() {{
@@ -55,12 +59,12 @@ public class BatchConfiguration {
 
 	@Bean
 	public Ebcdic2AsciiProcessor processor() {
-		return new Ebcdic2AsciiProcessor();
+		return new Ebcdic2AsciiProcessor(sourceFormat,targetFormat);
 	}
 
 	@Bean
 	public Resource outputResource(){
-		return new FileSystemResource(target);
+		return new FileSystemResource(targetLocation);
 	}
 
 	@Bean
