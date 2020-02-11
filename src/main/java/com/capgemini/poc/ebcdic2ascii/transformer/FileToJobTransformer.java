@@ -1,6 +1,5 @@
 package com.capgemini.poc.ebcdic2ascii.transformer;
 
-
 import com.capgemini.poc.ebcdic2ascii.listener.JobCompletionNotificationListener;
 import com.capgemini.poc.ebcdic2ascii.step.MoveTranslatedFileStep;
 import org.springframework.batch.core.Job;
@@ -46,7 +45,7 @@ public class FileToJobTransformer implements ApplicationContextAware {
 
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString("fileName", fileName)
-                .addDate("dateTime", new Date())
+//                .addDate("dateTime", new Date())
                 .toJobParameters();
 
         JobLaunchRequest request = new JobLaunchRequest(transformationJob(fileName), jobParameters);

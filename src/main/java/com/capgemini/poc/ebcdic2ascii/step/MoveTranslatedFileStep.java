@@ -1,7 +1,10 @@
 package com.capgemini.poc.ebcdic2ascii.step;
 
 import com.capgemini.poc.ebcdic2ascii.dto.LineContent;
+import com.capgemini.poc.ebcdic2ascii.listener.DeleteInputFilePostStepListener;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.StepExecutionListener;
+import org.springframework.batch.core.StepListener;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
@@ -22,12 +25,16 @@ public class MoveTranslatedFileStep {
     @Autowired
     private ItemWriter itemWriter;
 
+    @Autowired
+    private StepListener deleteInputFilePostStepListener;
+
     public Step get(String fileName) {
         return stepBuilderFactory.get("moveTranslatedFile")
                 .<LineContent, LineContent>chunk(10)
                 .reader(getItemReaderFromFileName(fileName))
                 .processor(processor)
                 .writer(itemWriter)
+                .listener(deleteInputFilePostStepListener)
                 .build();
     }
 
