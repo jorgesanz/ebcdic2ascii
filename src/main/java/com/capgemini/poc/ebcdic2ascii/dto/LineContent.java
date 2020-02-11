@@ -1,4 +1,4 @@
-package com.capgemini.poc.ebcdic2ascii;
+package com.capgemini.poc.ebcdic2ascii.dto;
 
 public class LineContent {
 

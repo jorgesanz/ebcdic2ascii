@@ -1,5 +1,6 @@
-package com.capgemini.poc.ebcdic2ascii;
+package com.capgemini.poc.ebcdic2ascii.processor;
 
+import com.capgemini.poc.ebcdic2ascii.dto.LineContent;
 import org.springframework.batch.item.ItemProcessor;
 
 import java.nio.ByteBuffer;
@@ -19,6 +20,7 @@ public class Ebcdic2AsciiProcessor implements ItemProcessor<LineContent, LineCon
         this.decoder = charset_out.newDecoder();
         this.encoder = charset_in.newEncoder();
     }
+
 
     @Override
     public LineContent process(LineContent lineContent) throws Exception {
