@@ -1,5 +1,6 @@
 package com.capgemini.poc.ebcdic2ascii;
 
+import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.item.ItemProcessor;
 
 import java.nio.ByteBuffer;
@@ -18,6 +19,10 @@ public class Ebcdic2AsciiProcessor implements ItemProcessor<LineContent, LineCon
         Charset charset_out = Charset.forName(sourceFormat);
         this.decoder = charset_out.newDecoder();
         this.encoder = charset_in.newEncoder();
+    }
+
+    public void one(StepContribution stepContribution){
+        stepContribution.getReadCount();
     }
 
     @Override

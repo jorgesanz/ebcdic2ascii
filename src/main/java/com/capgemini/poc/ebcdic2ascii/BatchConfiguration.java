@@ -37,8 +37,8 @@ import java.io.File;
 import java.io.FileReader;
 
 // tag::setup[]
-@Configuration
-@EnableBatchProcessing
+//@Configuration
+//@EnableBatchProcessing
 public class BatchConfiguration {
 
 	@Autowired
