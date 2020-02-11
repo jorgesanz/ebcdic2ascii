@@ -1,7 +1,6 @@
-package com.capgemini.poc.ebcdic2ascii;
+package com.capgemini.poc.ebcdic2ascii.transformer;
 
 
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.Date;
-import java.util.logging.Logger;
 
 @Component
 public class FileToJobTransformer implements ApplicationContextAware {
@@ -44,4 +42,5 @@ public class FileToJobTransformer implements ApplicationContextAware {
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.context = applicationContext;
     }
+    
 }

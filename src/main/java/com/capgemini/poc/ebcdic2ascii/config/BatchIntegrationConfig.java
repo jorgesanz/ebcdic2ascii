@@ -2,23 +2,17 @@ package com.capgemini.poc.ebcdic2ascii.config;
 
 import com.capgemini.poc.ebcdic2ascii.Ebcdic2AsciiProcessor;
 import com.capgemini.poc.ebcdic2ascii.LineContent;
-import com.capgemini.poc.ebcdic2ascii.TransformFileTasklet;
+import com.capgemini.poc.ebcdic2ascii.tasklet.TransformFileTasklet;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.core.scope.context.ChunkContext;
-import org.springframework.batch.core.step.tasklet.MethodInvokingTaskletAdapter;
-import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.integration.launch.JobLaunchingMessageHandler;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
-import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -87,19 +81,19 @@ public class BatchIntegrationConfig {
     }
 
 //    @Bean
-    public Step step1() {
-        return  this.stepBuilderFactory.get("step1")
-                .tasklet(myTasklet()).build();
-    }
-
-    private MethodInvokingTaskletAdapter  myTasklet() {
-        MethodInvokingTaskletAdapter adapter = new MethodInvokingTaskletAdapter();
-
-        adapter.setTargetObject(processor());
-        adapter.setTargetMethod("one");
-
-        return adapter;
-    }
+//    public Step step1() {
+//        return  this.stepBuilderFactory.get("step1")
+//                .tasklet(myTasklet()).build();
+//    }
+//
+//    private MethodInvokingTaskletAdapter  myTasklet() {
+//        MethodInvokingTaskletAdapter adapter = new MethodInvokingTaskletAdapter();
+//
+//        adapter.setTargetObject(processor());
+//        adapter.setTargetMethod("one");
+//
+//        return adapter;
+//    }
 
 
     @Bean
@@ -164,7 +158,8 @@ public class BatchIntegrationConfig {
 
     @Bean
     public TransformFileTasklet fileDeletingTasklet() {
-        TransformFileTasklet tasklet = new TransformFileTasklet();
+
+        TransformFileTasklet tasklet = new TransformFileTasklet(sourceFormat,targetFormat);
 
         tasklet.setDirectoryResource(new FileSystemResource("target/test-outputs/test-dir"));
 
