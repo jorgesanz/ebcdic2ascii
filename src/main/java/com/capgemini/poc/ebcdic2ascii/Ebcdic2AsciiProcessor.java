@@ -21,9 +21,6 @@ public class Ebcdic2AsciiProcessor implements ItemProcessor<LineContent, LineCon
         this.encoder = charset_in.newEncoder();
     }
 
-    public void one(StepContribution stepContribution){
-        stepContribution.getReadCount();
-    }
 
     @Override
     public LineContent process(LineContent lineContent) throws Exception {
