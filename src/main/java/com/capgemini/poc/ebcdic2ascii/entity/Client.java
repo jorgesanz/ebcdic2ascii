@@ -1,10 +1,21 @@
-package com.capgemini.poc.ebcdic2ascii.dto;
+package com.capgemini.poc.ebcdic2ascii.entity;
 
 import lombok.Data;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 @Data
+@Entity
 public class Client {
 
+    @Id
+    @GeneratedValue
+    private int id;
+
+    @Column(columnDefinition = "ENT-COD-CLIENTE")
     //    15 ENT-COD-CLIENTE        X(8).      8 posiciones
     private String codCLiente;
 

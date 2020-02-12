@@ -15,6 +15,8 @@
 	<description>Transformation ebcdic format to ascii</description>
 
 	<properties>
+		<spring.batch.version>2.2.0.RELEASE</spring.batch.version>
+		<mysql.driver.version>5.1.25</mysql.driver.version>
 		<java.version>1.8</java.version>
 	</properties>
 
@@ -22,6 +24,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-batch</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
 		<dependency>
@@ -80,6 +87,14 @@
 			<artifactId>lombok</artifactId>
 			<version>1.18.12</version>
 			<scope>provided</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.hsqldb/hsqldb -->
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.5.0</version>
+			<scope>test</scope>
 		</dependency>
 
 

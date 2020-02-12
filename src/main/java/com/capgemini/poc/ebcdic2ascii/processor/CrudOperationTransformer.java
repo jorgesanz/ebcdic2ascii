@@ -1,6 +1,7 @@
 package com.capgemini.poc.ebcdic2ascii.processor;
 
 import com.capgemini.poc.ebcdic2ascii.dto.*;
+import com.capgemini.poc.ebcdic2ascii.entity.Client;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
