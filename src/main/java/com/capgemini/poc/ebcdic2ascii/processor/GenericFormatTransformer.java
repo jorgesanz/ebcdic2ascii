@@ -9,12 +9,12 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 
-public class Ebcdic2AsciiProcessor implements ItemProcessor<LineContent, LineContent> {
+public class GenericFormatTransformer implements ItemProcessor<LineContent, LineContent> {
 
     private CharsetDecoder decoder;
     private CharsetEncoder encoder;
 
-    public Ebcdic2AsciiProcessor( String sourceFormat, String targetFormat) {
+    public GenericFormatTransformer(String sourceFormat, String targetFormat) {
         Charset charset_in = Charset.forName(targetFormat);
         Charset charset_out = Charset.forName(sourceFormat);
         this.decoder = charset_out.newDecoder();

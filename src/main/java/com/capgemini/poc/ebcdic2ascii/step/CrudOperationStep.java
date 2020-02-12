@@ -14,7 +14,7 @@ import static com.capgemini.poc.ebcdic2ascii.reader.ItemReaderFromFileName.getIt
 import static com.capgemini.poc.ebcdic2ascii.writer.WriterFromLineContentSupplier.getFlatFileItemWriter;
 
 @Component
-public class MoveTranslatedFileStep {
+public class CrudOperationStep {
 
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
@@ -29,12 +29,14 @@ public class MoveTranslatedFileStep {
     private String targetLocation;
 
     public Step get(String fileName) {
-        return stepBuilderFactory.get("moveTranslatedFile")
+
+        return stepBuilderFactory.get("CRUD operations")
                 .<LineContent, LineContent>chunk(10)
-                .reader(getItemReaderFromFileName(sourceLocation + File.separator + fileName))
+                .reader(getItemReaderFromFileName(targetLocation + File.separator +fileName))
                 .processor(processor)
-                .writer(getFlatFileItemWriter(targetLocation + File.separator + fileName))
+                .writer(getFlatFileItemWriter(targetLocation + File.separator + "2"+fileName ))
                 .build();
     }
+
 
 }
