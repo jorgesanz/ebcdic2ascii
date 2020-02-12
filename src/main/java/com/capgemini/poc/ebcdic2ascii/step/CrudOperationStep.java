@@ -1,9 +1,9 @@
 package com.capgemini.poc.ebcdic2ascii.step;
 
 import com.capgemini.poc.ebcdic2ascii.dto.LineContent;
+import com.capgemini.poc.ebcdic2ascii.processor.CrudOperationTransformer;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,8 @@ public class CrudOperationStep {
     private StepBuilderFactory stepBuilderFactory;
 
     @Autowired
-    private ItemProcessor processor;
+    private CrudOperationTransformer crudOperationTransformer;
+
 
     @Value("${source.location}")
     private String sourceLocation;
@@ -33,7 +34,7 @@ public class CrudOperationStep {
         return stepBuilderFactory.get("CRUD operations")
                 .<LineContent, LineContent>chunk(10)
                 .reader(getItemReaderFromFileName(targetLocation + File.separator +fileName))
-                .processor(processor)
+                .processor(crudOperationTransformer)
                 .writer(getFlatFileItemWriter(targetLocation + File.separator + "2"+fileName ))
                 .build();
     }

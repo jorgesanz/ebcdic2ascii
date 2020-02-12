@@ -1,9 +1,9 @@
 package com.capgemini.poc.ebcdic2ascii.step;
 
 import com.capgemini.poc.ebcdic2ascii.dto.LineContent;
+import com.capgemini.poc.ebcdic2ascii.processor.GenericFormatTransformer;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ public class MoveTranslatedFileStep {
     private StepBuilderFactory stepBuilderFactory;
 
     @Autowired
-    private ItemProcessor processor;
+    private GenericFormatTransformer genericFormatTransformer;
 
     @Value("${source.location}")
     private String sourceLocation;
@@ -32,7 +32,7 @@ public class MoveTranslatedFileStep {
         return stepBuilderFactory.get("moveTranslatedFile")
                 .<LineContent, LineContent>chunk(10)
                 .reader(getItemReaderFromFileName(sourceLocation + File.separator + fileName))
-                .processor(processor)
+                .processor(genericFormatTransformer)
                 .writer(getFlatFileItemWriter(targetLocation + File.separator + fileName))
                 .build();
     }

@@ -1,11 +1,8 @@
 package com.capgemini.poc.ebcdic2ascii.config;
 
-import com.capgemini.poc.ebcdic2ascii.dto.LineContent;
-import com.capgemini.poc.ebcdic2ascii.processor.GenericFormatTransformer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.integration.launch.JobLaunchingMessageHandler;
-import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,24 +20,8 @@ import java.io.File;
 @Configuration
 public class BatchIntegrationConfig {
 
-
-    @Value("${target.format}")
-    private String targetFormat;
-
-    @Value("${source.format}")
-    private String sourceFormat;
-
     @Value("${source.location}")
     private String ftpUploadDir;
-
-    @Value("${target.location}")
-    private String targetLocation;
-
-    @Bean
-    public ItemProcessor<LineContent, LineContent> processor() {
-//        return new Ebcdic2AsciiTransformer();
-                return new GenericFormatTransformer(sourceFormat, targetFormat);
-    }
 
     @Bean
     @InboundChannelAdapter(value = "fileInputChannel", poller = @Poller(fixedDelay = "1000"))
