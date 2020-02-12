@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 import static com.capgemini.poc.ebcdic2ascii.processor.CrudOperationTransformerConstants.*;
 
 @Component
-public class CrudOperationTransformer implements ItemProcessor<LineContent, CrudOperation> {
+public class CrudOperationTransformer implements ItemProcessor<LineContent, Client> {
 
     @Override
-    public CrudOperation process(LineContent lineContent) throws Exception {
-        return createCrudOperation(lineContent.getContent());
+    public Client process(LineContent lineContent) throws Exception {
+        return createCrudOperation(lineContent.getContent()).getClient();
     }
 
     private CrudOperation createCrudOperation(String content) {
@@ -44,7 +44,9 @@ public class CrudOperationTransformer implements ItemProcessor<LineContent, Crud
             case "I": return Action.CREATE;
             case "M": return Action.UPDATE;
             case "B": return Action.DELETE;
-            default: throw new IllegalArgumentException("No action found");
+            default: return Action.CREATE;
+            //TODO UNCOMMENT
+//            default: throw new IllegalArgumentException("No action found");
         }
     }
 }

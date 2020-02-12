@@ -15,7 +15,6 @@ public class Client {
     @GeneratedValue
     private int id;
 
-    @Column(columnDefinition = "ENT-COD-CLIENTE")
     //    15 ENT-COD-CLIENTE        X(8).      8 posiciones
     private String codCLiente;
 
