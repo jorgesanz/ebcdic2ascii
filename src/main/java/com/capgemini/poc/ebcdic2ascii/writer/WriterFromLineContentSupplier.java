@@ -4,25 +4,18 @@ import com.capgemini.poc.ebcdic2ascii.dto.LineContent;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Component;
 
-import java.util.function.Supplier;
+public class WriterFromLineContentSupplier{
 
-@Component
-public class WriterFromLineContentSupplier implements Supplier<FlatFileItemWriter> {
 
-    @Value("${target.location}")
-    private String targetLocation;
 
-    @Override
-    public FlatFileItemWriter get() {
+    public static FlatFileItemWriter getFlatFileItemWriter(String fileLocation) {
         FlatFileItemWriter<LineContent> writer = new FlatFileItemWriter<>();
 
         //Set output file location
-        writer.setResource(outputResource());
+        writer.setResource(outputResource(fileLocation));
 
         //All job repetitions should "append" to same output file
         writer.setAppendAllowed(true);
@@ -41,7 +34,7 @@ public class WriterFromLineContentSupplier implements Supplier<FlatFileItemWrite
         return writer;
     }
 
-    public Resource outputResource() {
-        return new FileSystemResource(targetLocation);
+    public static Resource outputResource(String fileLocation) {
+        return new FileSystemResource(fileLocation);
     }
 }
