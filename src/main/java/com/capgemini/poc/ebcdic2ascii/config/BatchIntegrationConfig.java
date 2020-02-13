@@ -27,7 +27,7 @@ public class BatchIntegrationConfig {
     @Autowired
     EntityManagerFactory emf;
 
-    @Value("${source.location}")
+    @Value("${origin.file.location}")
     private String ftpUploadDir;
 
     @Bean
@@ -35,7 +35,7 @@ public class BatchIntegrationConfig {
     public MessageSource<File> fileReadingMessageSource() {
         FileReadingMessageSource source = new FileReadingMessageSource();
         source.setDirectory(new File(ftpUploadDir));
-//        source.setFilter(new SimplePatternFileListFilter("*.csv"));
+//        source.setFilter(new SimplePatternFileListFilter("*.ebcdic"));
         source.setScanEachPoll(true);
         source.setUseWatchService(true);
         return source;

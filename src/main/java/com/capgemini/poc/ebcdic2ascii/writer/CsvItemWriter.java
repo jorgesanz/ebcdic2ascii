@@ -11,7 +11,8 @@ import org.springframework.core.io.FileSystemResource;
 
 public class CsvItemWriter {
 
-    ItemWriter<Client> databaseCsvItemWriter(String exportFilePath) {
+
+    public static ItemWriter<Client> databaseCsvItemWriter(String exportFilePath) {
         FlatFileItemWriter<Client> csvFileWriter = new FlatFileItemWriter<>();
 
         String exportFileHeader = "NAME;EMAIL_ADDRESS;PACKAGE";
@@ -26,7 +27,7 @@ public class CsvItemWriter {
         return csvFileWriter;
     }
 
-    private LineAggregator<Client> createStudentLineAggregator() {
+    private static LineAggregator<Client> createStudentLineAggregator() {
         DelimitedLineAggregator<Client> lineAggregator = new DelimitedLineAggregator<>();
         lineAggregator.setDelimiter(";");
 
@@ -36,7 +37,7 @@ public class CsvItemWriter {
         return lineAggregator;
     }
 
-    private FieldExtractor<Client> createStudentFieldExtractor() {
+    private static FieldExtractor<Client> createStudentFieldExtractor() {
         BeanWrapperFieldExtractor<Client> extractor = new BeanWrapperFieldExtractor<>();
         extractor.setNames(new String[] {"name", "emailAddress", "purchasedPackage"});
         return extractor;
