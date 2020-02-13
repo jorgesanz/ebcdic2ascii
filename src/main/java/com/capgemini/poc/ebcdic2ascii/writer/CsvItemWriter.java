@@ -39,7 +39,7 @@ public class CsvItemWriter {
 
     private static FieldExtractor<Client> createStudentFieldExtractor() {
         BeanWrapperFieldExtractor<Client> extractor = new BeanWrapperFieldExtractor<>();
-        extractor.setNames(new String[] {"name", "emailAddress", "purchasedPackage"});
+        extractor.setNames(new String[] {"codCLiente", "numPresnnCob", "tipSrSraEmpresa"});
         return extractor;
     }
 }
