@@ -5,6 +5,8 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.integration.launch.JobLaunchingMessageHandler;
 import org.springframework.batch.item.database.JpaItemWriter;
+import org.springframework.batch.item.database.JpaPagingItemReader;
+import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -53,5 +55,15 @@ public class BatchIntegrationConfig {
         writer.setEntityManagerFactory(emf);
         return writer;
     }
+
+    @Bean
+    public JpaPagingItemReader reader(){
+
+        JpaPagingItemReader reader = new JpaPagingItemReader();
+        reader.setEntityManagerFactory(emf);
+        reader.setQueryString("SELECT p from Client p");
+        return reader;
+    }
+
 
 }

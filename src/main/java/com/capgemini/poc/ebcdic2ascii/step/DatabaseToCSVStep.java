@@ -1,10 +1,9 @@
 package com.capgemini.poc.ebcdic2ascii.step;
 
 import com.capgemini.poc.ebcdic2ascii.entity.Client;
-import com.capgemini.poc.ebcdic2ascii.processor.CrudOperationTransformer;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -20,10 +19,9 @@ public class DatabaseToCSVStep {
     private StepBuilderFactory stepBuilderFactory;
 
     @Autowired
-    private ItemReader<Client> itemReader;
+    private JpaPagingItemReader<Client> itemReader;
 
-
-    @Value("${transformed.file.location}")
+    @Value("${csv.file.location}")
     private String targetLocation;
 
     public Step get(String fileName) {
