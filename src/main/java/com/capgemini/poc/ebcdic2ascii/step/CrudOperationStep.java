@@ -1,12 +1,9 @@
 package com.capgemini.poc.ebcdic2ascii.step;
 
-import com.capgemini.poc.ebcdic2ascii.classifier.CrudOperationClassifier;
 import com.capgemini.poc.ebcdic2ascii.dto.LineContent;
-import com.capgemini.poc.ebcdic2ascii.entity.Client;
 import com.capgemini.poc.ebcdic2ascii.processor.CrudOperationTransformer;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.support.ClassifierCompositeItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

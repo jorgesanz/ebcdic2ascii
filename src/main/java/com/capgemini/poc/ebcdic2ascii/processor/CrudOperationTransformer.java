@@ -1,14 +1,12 @@
 package com.capgemini.poc.ebcdic2ascii.processor;
 
-import com.capgemini.poc.ebcdic2ascii.dto.*;
+import com.capgemini.poc.ebcdic2ascii.dto.Action;
+import com.capgemini.poc.ebcdic2ascii.dto.CrudOperation;
+import com.capgemini.poc.ebcdic2ascii.dto.LineContent;
 import com.capgemini.poc.ebcdic2ascii.entity.Client;
 import com.capgemini.poc.ebcdic2ascii.entity.Contract;
-
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 import static com.capgemini.poc.ebcdic2ascii.processor.CrudOperationTransformerConstants.*;
 

@@ -1,10 +1,15 @@
 package com.capgemini.poc.ebcdic2ascii.entity;
 
-import com.capgemini.poc.ebcdic2ascii.dto.CrudOperation;
-import lombok.Data;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
-
+@Entity
 public class Contract{
+
+	@Id
+	@GeneratedValue
+	private int id;
 
 //    15 ENT-COD-CONTRATO      S9(9).     10 posiciones
     private String codContrato;

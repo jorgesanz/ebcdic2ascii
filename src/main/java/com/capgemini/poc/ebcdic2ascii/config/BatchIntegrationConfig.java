@@ -3,6 +3,7 @@ package com.capgemini.poc.ebcdic2ascii.config;
 import com.capgemini.poc.ebcdic2ascii.classifier.CrudOperationClassifier;
 import com.capgemini.poc.ebcdic2ascii.dto.CrudOperation;
 import com.capgemini.poc.ebcdic2ascii.entity.Client;
+import com.capgemini.poc.ebcdic2ascii.entity.Contract;
 import com.capgemini.poc.ebcdic2ascii.writer.DeleteJdbcWriter;
 import com.capgemini.poc.ebcdic2ascii.writer.UpsertJdbcWriter;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -10,7 +11,6 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.integration.launch.JobLaunchingMessageHandler;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
-import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.batch.item.support.ClassifierCompositeItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,8 +55,15 @@ public class BatchIntegrationConfig {
     }
 
     @Bean
-    public JpaItemWriter<Client> writer() {
+    public JpaItemWriter<Client> clientWriter() {
         JpaItemWriter<Client> writer = new JpaItemWriter();
+        writer.setEntityManagerFactory(emf);
+        return writer;
+    }
+
+    @Bean
+    public JpaItemWriter<Contract> contractWriter() {
+        JpaItemWriter<Contract> writer = new JpaItemWriter();
         writer.setEntityManagerFactory(emf);
         return writer;
     }
@@ -73,7 +80,7 @@ public class BatchIntegrationConfig {
     @Bean
     public ClassifierCompositeItemWriter<CrudOperation> classifierCustomerCompositeItemWriter() throws Exception {
         ClassifierCompositeItemWriter<CrudOperation> compositeItemWriter = new ClassifierCompositeItemWriter<>();
-        compositeItemWriter.setClassifier(new CrudOperationClassifier(new DeleteJdbcWriter(), new UpsertJdbcWriter()));
+        compositeItemWriter.setClassifier(new CrudOperationClassifier(new DeleteJdbcWriter(), new UpsertJdbcWriter(clientWriter(),contractWriter())));
         return compositeItemWriter;
     }
 
