@@ -7,14 +7,17 @@ import com.capgemini.poc.ebcdic2ascii.entity.Contract;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import static com.capgemini.poc.ebcdic2ascii.processor.CrudOperationTransformerConstants.*;
 
 @Component
-public class CrudOperationTransformer implements ItemProcessor<LineContent, Client> {
+public class CrudOperationTransformer implements ItemProcessor<LineContent, CrudOperation> {
 
     @Override
-    public Client process(LineContent lineContent) throws Exception {
-        return createCrudOperation(lineContent.getContent()).getClient();
+    public CrudOperation process(LineContent lineContent) throws Exception {
+        return createCrudOperation(lineContent.getContent());
     }
 
     private CrudOperation createCrudOperation(String content) {

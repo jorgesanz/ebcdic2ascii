@@ -1,12 +1,17 @@
 package com.capgemini.poc.ebcdic2ascii.config;
 
+import com.capgemini.poc.ebcdic2ascii.classifier.CrudOperationClassifier;
+import com.capgemini.poc.ebcdic2ascii.dto.CrudOperation;
 import com.capgemini.poc.ebcdic2ascii.entity.Client;
+import com.capgemini.poc.ebcdic2ascii.writer.DeleteJdbcWriter;
+import com.capgemini.poc.ebcdic2ascii.writer.UpsertJdbcWriter;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.integration.launch.JobLaunchingMessageHandler;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
+import org.springframework.batch.item.support.ClassifierCompositeItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -63,6 +68,13 @@ public class BatchIntegrationConfig {
         reader.setEntityManagerFactory(emf);
         reader.setQueryString("SELECT p from Client p");
         return reader;
+    }
+
+    @Bean
+    public ClassifierCompositeItemWriter<CrudOperation> classifierCustomerCompositeItemWriter() throws Exception {
+        ClassifierCompositeItemWriter<CrudOperation> compositeItemWriter = new ClassifierCompositeItemWriter<>();
+        compositeItemWriter.setClassifier(new CrudOperationClassifier(new DeleteJdbcWriter(), new UpsertJdbcWriter()));
+        return compositeItemWriter;
     }
 
 

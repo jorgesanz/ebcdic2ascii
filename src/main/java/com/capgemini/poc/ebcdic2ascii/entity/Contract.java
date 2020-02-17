@@ -1,9 +1,10 @@
 package com.capgemini.poc.ebcdic2ascii.entity;
 
+import com.capgemini.poc.ebcdic2ascii.dto.CrudOperation;
 import lombok.Data;
 
 
-public class Contract {
+public class Contract{
 
 //    15 ENT-COD-CONTRATO      S9(9).     10 posiciones
     private String codContrato;
