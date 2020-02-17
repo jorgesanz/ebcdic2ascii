@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 import static com.capgemini.poc.ebcdic2ascii.processor.CrudOperationTransformerConstants.*;
 
 @Component
-public class CrudOperationTransformer implements ItemProcessor<LineContent, Client> {
+public class CrudOperationTransformer implements ItemProcessor<String, Client> {
 
     @Override
-    public Client process(LineContent lineContent) throws Exception {
-        return createCrudOperation(lineContent.getContent()).getClient();
+    public Client process(String lineContent) throws Exception {
+        return createCrudOperation(lineContent).getClient();
     }
 
     private CrudOperation createCrudOperation(String content) {

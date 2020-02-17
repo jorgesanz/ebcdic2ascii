@@ -1,6 +1,5 @@
 package com.capgemini.poc.ebcdic2ascii.writer;
 
-import com.capgemini.poc.ebcdic2ascii.dto.LineContent;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
 import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
@@ -12,7 +11,7 @@ public class WriterFromLineContentSupplier{
 
 
     public static FlatFileItemWriter getFlatFileItemWriter(String fileLocation) {
-        FlatFileItemWriter<LineContent> writer = new FlatFileItemWriter<>();
+        FlatFileItemWriter<String> writer = new FlatFileItemWriter<>();
 
         //Set output file location
         writer.setResource(outputResource(fileLocation));
@@ -21,10 +20,10 @@ public class WriterFromLineContentSupplier{
         writer.setAppendAllowed(true);
 
         //Name field values sequence based on object properties
-        writer.setLineAggregator(new DelimitedLineAggregator<LineContent>() {
+        writer.setLineAggregator(new DelimitedLineAggregator<String>() {
             {
                 setDelimiter(",");
-                setFieldExtractor(new BeanWrapperFieldExtractor<LineContent>() {
+                setFieldExtractor(new BeanWrapperFieldExtractor<String>() {
                     {
                         setNames(new String[]{/* "id",*/ "content"});
                     }

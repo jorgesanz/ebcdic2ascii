@@ -1,9 +1,8 @@
 package com.capgemini.poc.ebcdic2ascii.processor;
 
-import com.capgemini.poc.ebcdic2ascii.dto.LineContent;
 import org.springframework.batch.item.ItemProcessor;
 
-public class Ebcdic2AsciiTransformer implements ItemProcessor<LineContent, LineContent> {
+public class Ebcdic2AsciiTransformer implements ItemProcessor<String, String> {
 
     // Translate Ebcdic char to ASCII
     final static char[] E2A_table = new char[] {
@@ -34,10 +33,9 @@ public class Ebcdic2AsciiTransformer implements ItemProcessor<LineContent, LineC
 
 
     @Override
-    public LineContent process(LineContent lineContent) throws Exception {
+    public String process(String lineContent) throws Exception {
 
-        lineContent.setContent(toASCII(lineContent.getContent().getBytes()));
-        return lineContent;
+        return toASCII(lineContent.getBytes());
 
     }
 

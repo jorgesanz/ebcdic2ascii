@@ -1,6 +1,5 @@
 package com.capgemini.poc.ebcdic2ascii.step;
 
-import com.capgemini.poc.ebcdic2ascii.dto.LineContent;
 import com.capgemini.poc.ebcdic2ascii.entity.Client;
 import com.capgemini.poc.ebcdic2ascii.processor.CrudOperationTransformer;
 import org.springframework.batch.core.Step;
@@ -36,7 +35,7 @@ public class CrudOperationStep {
     public Step get(String fileName) {
 
         return stepBuilderFactory.get("CRUD operations")
-                .<LineContent, LineContent>chunk(10)
+                .<String, String>chunk(10)
                 .reader(getItemReaderFromFileName(targetLocation + File.separator +fileName))
                 .processor(crudOperationTransformer)
                 .writer(itemWriter)
