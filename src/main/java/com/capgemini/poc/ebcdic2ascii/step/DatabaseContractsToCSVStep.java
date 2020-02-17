@@ -1,6 +1,6 @@
 package com.capgemini.poc.ebcdic2ascii.step;
 
-import com.capgemini.poc.ebcdic2ascii.entity.Client;
+import com.capgemini.poc.ebcdic2ascii.entity.Contract;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -11,28 +11,30 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 
-import static com.capgemini.poc.ebcdic2ascii.writer.CsvItemWriter.databaseCsvItemWriter;
+import static com.capgemini.poc.ebcdic2ascii.writer.CsvContractItemWriter.csvContractItemWriter;
 
 @Component
-public class DatabaseToCSVStep {
+public class DatabaseContractsToCSVStep {
 
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
 
     @Autowired
-    private JpaPagingItemReader<Client> itemReader;
+    private JpaPagingItemReader<Contract> contractItemReader;
 
-    @Value("${csv.file.location}")
+
+    @Value("${csv.file.mysql.location}")
     private String targetLocation;
 
     public Step get(String fileName) {
 
         return stepBuilderFactory.get("CRUD operations")
-                .<Client, Client>chunk(10)
-                .reader(itemReader)
-                .writer(databaseCsvItemWriter(targetLocation + File.separator +changeExtension(fileName,"csv")))
+                .<Contract, Contract>chunk(10)
+                .reader(contractItemReader)
+                .writer(csvContractItemWriter(targetLocation + File.separator +changeExtension("contract"+fileName,"csv")))
                 .build();
     }
+
 
     private String changeExtension(String fileName, String extension) {
         return FilenameUtils.removeExtension(fileName)+"."+extension;

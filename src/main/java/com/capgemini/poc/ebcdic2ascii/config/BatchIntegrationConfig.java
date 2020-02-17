@@ -54,14 +54,12 @@ public class BatchIntegrationConfig {
         return new JobLaunchingMessageHandler(jobLauncher);
     }
 
-    @Bean
     public JpaItemWriter<Client> clientWriter() {
         JpaItemWriter<Client> writer = new JpaItemWriter();
         writer.setEntityManagerFactory(emf);
         return writer;
     }
 
-    @Bean
     public JpaItemWriter<Contract> contractWriter() {
         JpaItemWriter<Contract> writer = new JpaItemWriter();
         writer.setEntityManagerFactory(emf);
@@ -69,11 +67,20 @@ public class BatchIntegrationConfig {
     }
 
     @Bean
-    public JpaPagingItemReader reader(){
+    public JpaPagingItemReader<Client> ClientReader(){
 
         JpaPagingItemReader reader = new JpaPagingItemReader();
         reader.setEntityManagerFactory(emf);
         reader.setQueryString("SELECT p from Client p");
+        return reader;
+    }
+
+    @Bean
+    public JpaPagingItemReader<Contract> ContractReader(){
+
+        JpaPagingItemReader reader = new JpaPagingItemReader();
+        reader.setEntityManagerFactory(emf);
+        reader.setQueryString("SELECT p from Contract p");
         return reader;
     }
 

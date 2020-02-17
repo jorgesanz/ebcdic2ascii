@@ -9,10 +9,10 @@ import org.springframework.batch.item.file.transform.FieldExtractor;
 import org.springframework.batch.item.file.transform.LineAggregator;
 import org.springframework.core.io.FileSystemResource;
 
-public class CsvItemWriter {
+public class CsvClientItemWriter {
 
 
-    public static ItemWriter<Client> databaseCsvItemWriter(String exportFilePath) {
+    public static ItemWriter<Client> csvClientItemWriter(String exportFilePath) {
         FlatFileItemWriter<Client> csvFileWriter = new FlatFileItemWriter<>();
 
         String exportFileHeader = "NAME;EMAIL_ADDRESS;PACKAGE";

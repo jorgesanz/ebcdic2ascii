@@ -6,9 +6,7 @@ import com.capgemini.poc.ebcdic2ascii.writer.DeleteJdbcWriter;
 import com.capgemini.poc.ebcdic2ascii.writer.UpsertJdbcWriter;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.classify.Classifier;
-import org.springframework.stereotype.Component;
 
-@Component
 public class CrudOperationClassifier implements Classifier<CrudOperation,  ItemWriter<? super CrudOperation>> {
 
     private ItemWriter<CrudOperation> upsertJdbcWriter;
