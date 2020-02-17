@@ -1,6 +1,7 @@
 package com.capgemini.poc.ebcdic2ascii.step;
 
 import com.capgemini.poc.ebcdic2ascii.entity.Client;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.database.JpaPagingItemReader;
@@ -29,8 +30,12 @@ public class DatabaseToCSVStep {
         return stepBuilderFactory.get("CRUD operations")
                 .<Client, Client>chunk(10)
                 .reader(itemReader)
-                .writer(databaseCsvItemWriter(targetLocation + File.separator +fileName))
+                .writer(databaseCsvItemWriter(targetLocation + File.separator +changeExtension(fileName,"csv")))
                 .build();
+    }
+
+    private String changeExtension(String fileName, String extension) {
+        return FilenameUtils.removeExtension(fileName)+"."+extension;
     }
 
 
