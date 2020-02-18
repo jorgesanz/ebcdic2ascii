@@ -2,9 +2,10 @@ package com.capgemini.poc.ebcdic2ascii.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 @Entity
-public class Contract{
+public class Contract implements Serializable {
 
 	@Id
 //    15 ENT-COD-CONTRATO      S9(9).     10 posiciones

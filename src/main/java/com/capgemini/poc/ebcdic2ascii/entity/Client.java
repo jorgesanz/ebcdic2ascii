@@ -3,9 +3,10 @@ package com.capgemini.poc.ebcdic2ascii.entity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 @Entity
-public class Client{
+public class Client implements Serializable {
 
     //    15 ENT-COD-CLIENTE        X(8).      8 posiciones
 	@Id
