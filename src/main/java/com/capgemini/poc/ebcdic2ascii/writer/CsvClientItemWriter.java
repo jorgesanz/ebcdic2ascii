@@ -15,7 +15,7 @@ public class CsvClientItemWriter {
     public static ItemWriter<Client> csvClientItemWriter(String exportFilePath) {
         FlatFileItemWriter<Client> csvFileWriter = new FlatFileItemWriter<>();
 
-        String exportFileHeader = "NAME;EMAIL_ADDRESS;PACKAGE";
+        String exportFileHeader = "ENT-COD-CLIENTE;ENT-NUM-PRESNN-COB;ENT-TIP-SR-SRA-EMPRESA;ENT-NOM-TITULAR-CUENTA;ENT-NOM-APED-1-TIT-CTA X(45);ENT-NOM-APED-2-TIT-CTA;ENT-NUM-DNI-NIF-CIF-CU;ENT-TIP-DCO-IDE-TIT-CU";
         StringHeaderWriter headerWriter = new StringHeaderWriter(exportFileHeader);
         csvFileWriter.setHeaderCallback(headerWriter);
 
@@ -39,7 +39,7 @@ public class CsvClientItemWriter {
 
     private static FieldExtractor<Client> createStudentFieldExtractor() {
         BeanWrapperFieldExtractor<Client> extractor = new BeanWrapperFieldExtractor<>();
-        extractor.setNames(new String[] {"codCLiente", "numPresnnCob", "tipSrSraEmpresa"});
+        extractor.setNames(new String[] {"codCLiente", "numPresnnCob", "tipSrSraEmpresa","nomTitularCuenta","nomAped1TitCta","nomAped2TitCta","numDniNifCifCu","tipDcoIdeTitCu"});
         return extractor;
     }
 }

@@ -50,14 +50,13 @@ public class CrudOperationTransformer implements ItemProcessor<LineContent, Crud
         contract.setCodPostalCto(content.substring(ENT_COD_POSTAL_C_FIRST_POS, ENT_COD_POSTAL_C_FIRST_POS+ENT_COD_POSTAL_C_LENGTH));
         contract.setTipModoPago(content.substring(ENT_TIP_MODO_PAG_FIRST_POS, ENT_TIP_MODO_PAG_FIRST_POS+ENT_TIP_MODO_PAG_LENGTH));
         contract.setDesAdiContrato(content.substring(ENT_DES_ADI_CONTRATO_FIRST_POS, ENT_DES_ADI_CONTRATO_FIRST_POS+ENT_DES_ADI_CONTRATO_LENGTH));
-        //TODO FILL ALL POSITIONS
         return contract;
     }
 
     private Client createClient(String content) {
         Client client = new Client();
         client.setCodCLiente(content.substring(COD_CLIENTE_FIRST_POS, COD_CLIENTE_FIRST_POS+COD_CLIENTE_LENGTH));
-        client.setNumPresnnCob(content.substring(ENT_NUM_PRESNN_C_CLI_FIRST_POS, ENT_NUM_PRESNN_C_CLI_LENGTH + ENT_NUM_PRESNN_C_CLI_LENGTH));
+        client.setNumPresnnCob(content.substring(ENT_NUM_PRESNN_C_CLI_FIRST_POS, ENT_NUM_PRESNN_C_CLI_FIRST_POS + ENT_NUM_PRESNN_C_CLI_LENGTH));
         client.setTipSrSraEmpresa(content.substring(ENT_TIP_SR_SRA_E_FIRST_POS, ENT_TIP_SR_SRA_E_FIRST_POS+ENT_TIP_SR_SRA_E_LENGTH));
         client.setNomTitularCuenta(content.substring(ENT_NOM_TITULAR__FIRST_POS, ENT_NOM_TITULAR__FIRST_POS+ENT_NOM_TITULAR__LENGTH));
         client.setNomAped1TitCta(content.substring(ENT_NOM_APED_1_T_FIRST_POS,ENT_NOM_APED_1_T_FIRST_POS+ENT_NOM_APED_1_T_LENGTH));
@@ -65,7 +64,6 @@ public class CrudOperationTransformer implements ItemProcessor<LineContent, Crud
         client.setNumDniNifCifCu(content.substring(ENT_NUM_DNI_NIF__FIRST_POS, ENT_NUM_DNI_NIF__FIRST_POS+ENT_NUM_DNI_NIF__LENGTH));
         client.setTipDcoIdeTitCu(content.substring(ENT_TIP_DCO_IDE__FIRST_POS, ENT_TIP_DCO_IDE__FIRST_POS+ENT_TIP_DCO_IDE__LENGTH));
         
-        //TODO FILL ALL POSITIONS
         return client;
     }
 
@@ -74,9 +72,7 @@ public class CrudOperationTransformer implements ItemProcessor<LineContent, Crud
             case "A": return Action.CREATE;
             case "M": return Action.UPDATE;
             case "B": return Action.DELETE;
-            default: return Action.CREATE;
-            //TODO UNCOMMENT
-//            default: throw new IllegalArgumentException("No action found");
+            default: throw new IllegalArgumentException("No action found");
         }
     }
 }

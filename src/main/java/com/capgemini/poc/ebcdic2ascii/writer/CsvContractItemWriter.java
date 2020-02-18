@@ -15,7 +15,7 @@ public class CsvContractItemWriter {
     public static ItemWriter<Contract> csvContractItemWriter(String exportFilePath) {
         FlatFileItemWriter<Contract> csvFileWriter = new FlatFileItemWriter<>();
 
-        String exportFileHeader = "NAME;EMAIL_ADDRESS;PACKAGE";
+        String exportFileHeader = "ENT-COD-CONTRATO;ENT-COD-CLIENTE;ENT-COD-PROVINCIA;ENT-COD-POBLACION;ENT-COD-CALLE;ENT-COD-FINCA;ENT-COD-PUNTO-SUMIN;ENT-NUM-PRESNN-COB;ENT-COD-MULTIS;ENT-COD-ESTRU-MSERV;ENT-IDE-ZONA-FACTN;ENT-COD-SEGMENTO;ENT-TIP-ORG-INTERNA;ENT-COD-ORGAN-INTER;ENT-COD-CNAE;ENT-TIP-CONTRATO;ENT-FEC-ALTA-CONTRATO;ENT-FORMA-PAGO;ENT-COD-PAIS;ENT-COD-POSTAL-CTO;ENT-TIP-MODO-PAGO;ENT-DES-ADI-CONTRATO";
         StringHeaderWriter headerWriter = new StringHeaderWriter(exportFileHeader);
         csvFileWriter.setHeaderCallback(headerWriter);
 
@@ -39,7 +39,7 @@ public class CsvContractItemWriter {
 
     private static FieldExtractor<Contract> createStudentFieldExtractor() {
         BeanWrapperFieldExtractor<Contract> extractor = new BeanWrapperFieldExtractor<>();
-        extractor.setNames(new String[] {"codCliente", "codContrato", "codProvincia"});
+        extractor.setNames(new String[] {"codCliente", "codContrato", "codProvincia","codPoblacion","codCalle","codFinca","codPuntoSumin","numPresnn","codMultis","codEstruMserv","ideZonaFactn","codSegmento","tipOrgInterna","codOrganInter","codCnae","tipContrato","fecAltaContrato","formaPago","codPais","codPostalCto","tipModoPago","desAdiContrato"});
         return extractor;
     }
 }
