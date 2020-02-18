@@ -2,10 +2,7 @@ package com.capgemini.poc.ebcdic2ascii.transformer;
 
 
 import com.capgemini.poc.ebcdic2ascii.listener.JobCompletionNotificationListener;
-import com.capgemini.poc.ebcdic2ascii.step.CrudOperationStep;
-import com.capgemini.poc.ebcdic2ascii.step.DatabaseClientsToCSVStep;
-import com.capgemini.poc.ebcdic2ascii.step.DatabaseContractsToCSVStep;
-import com.capgemini.poc.ebcdic2ascii.step.MoveTranslatedFileStep;
+import com.capgemini.poc.ebcdic2ascii.step.*;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -37,6 +34,9 @@ public class FileToJobTransformer {
     private DatabaseContractsToCSVStep databaseContractsToCSVStep;
 
     @Autowired
+    private CsvComparatorStep csvComparatorStep;
+
+    @Autowired
     private JobCompletionNotificationListener listener;
 
     @Transformer(inputChannel = "fileInputChannel", outputChannel = "jobChannel")
@@ -62,6 +62,7 @@ public class FileToJobTransformer {
                 .next(crudOperationStep.get(fileName))
                 .next(databaseClientsToCSVStep.get(fileName))
                 .next(databaseContractsToCSVStep.get(fileName))
+                .next(csvComparatorStep.get(fileName))
                 .build();
     }
 
