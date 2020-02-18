@@ -7,12 +7,9 @@ import javax.persistence.Id;
 @Entity
 public class Client{
 
-    @Id
-    @GeneratedValue
-    private int id;
-
     //    15 ENT-COD-CLIENTE        X(8).      8 posiciones
-    private String codCLiente;
+	@Id
+	private String codCLiente;
 
     //           15 ENT-NUM-PRESNN-COB     S9(4).     5 posiciones
     private String numPresnnCob;
@@ -34,14 +31,6 @@ public class Client{
 
     //           15 ENT-TIP-DCO-IDE-TIT-CU X(2).      2 posiciones
     private String tipDcoIdeTitCu;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getCodCLiente() {
 		return codCLiente;
