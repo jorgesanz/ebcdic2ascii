@@ -22,8 +22,6 @@ public class CrudOperationStep {
     @Autowired
     private CrudOperationTransformer crudOperationTransformer;
 
-//    @Autowired
-//    private JpaItemWriter<Client> itemWriter;
 
     @Autowired
     private ClassifierCompositeItemWriter classifierCompositeItemWriter;
