@@ -22,18 +22,13 @@ public class MoveTranslatedFileStep {
     @Autowired
     private GenericFormatTransformer genericFormatTransformer;
 
-    @Value("${origin.file.location}")
-    private String sourceLocation;
 
-    @Value("${transformed.file.location}")
-    private String targetLocation;
-
-    public Step get(String fileName) {
+    public Step get(String inputLocation, String outputLocation) {
         return stepBuilderFactory.get("moveTranslatedFile")
                 .<LineContent, LineContent>chunk(10)
-                .reader(getItemReaderFromFileName(sourceLocation + File.separator + fileName))
+                .reader(getItemReaderFromFileName(inputLocation))
                 .processor(genericFormatTransformer)
-                .writer(getFlatFileItemWriter(targetLocation + File.separator + fileName))
+                .writer(getFlatFileItemWriter(outputLocation))
                 .build();
     }
 

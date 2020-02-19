@@ -22,16 +22,12 @@ public class DatabaseClientsToCSVStep {
     @Autowired
     private JpaPagingItemReader<Client> clientItemReader;
 
-
-    @Value("${csv.file.mysql.location}")
-    private String targetLocation;
-
     public Step get(String fileName) {
 
         return stepBuilderFactory.get("CRUD operations")
                 .<Client, Client>chunk(10)
                 .reader(clientItemReader)
-                .writer(csvClientItemWriter(targetLocation + File.separator +changeExtension("client"+fileName,"csv")))
+                .writer(csvClientItemWriter(fileName))
                 .build();
     }
 

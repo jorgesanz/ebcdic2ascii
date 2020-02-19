@@ -23,6 +23,7 @@ import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.core.MessageSource;
 import org.springframework.integration.file.FileReadingMessageSource;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -104,6 +105,5 @@ public class BatchIntegrationConfig {
         compositeItemWriter.setClassifier(new CrudOperationClassifier(new DeleteJdbcWriter(clientDeleter(), contractDeleter()), new UpsertJdbcWriter(clientWriter(),contractWriter())));
         return compositeItemWriter;
     }
-
 
 }

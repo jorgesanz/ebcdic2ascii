@@ -1,6 +1,8 @@
 package com.capgemini.poc.ebcdic2ascii.transformer;
 
 
+import com.capgemini.poc.ebcdic2ascii.builder.JobFilePathsBuilder;
+import com.capgemini.poc.ebcdic2ascii.dto.JobFilePaths;
 import com.capgemini.poc.ebcdic2ascii.listener.JobCompletionNotificationListener;
 import com.capgemini.poc.ebcdic2ascii.step.*;
 import org.springframework.batch.core.Job;
@@ -39,6 +41,9 @@ public class FileToJobTransformer {
     @Autowired
     private JobCompletionNotificationListener listener;
 
+    @Autowired
+    private JobFilePathsBuilder jobFilePathsBuilder;
+
     @Transformer(inputChannel = "fileInputChannel", outputChannel = "jobChannel")
     public JobLaunchRequest transform(File aFile) {
 
@@ -55,14 +60,27 @@ public class FileToJobTransformer {
     }
 
     public Job transformationJob(String fileName) {
+
+        JobFilePaths jobFilePaths = jobFilePathsBuilder.get(fileName);
+
+
         return jobBuilderFactory.get("importUserJob")
 //                .incrementer(new RunIdIncrementer())
 				.listener(listener)
-                .start(moveTranslatedFileStep.get(fileName))
-                .next(crudOperationStep.get(fileName))
-                .next(databaseClientsToCSVStep.get(fileName))
-                .next(databaseContractsToCSVStep.get(fileName))
-                .next(csvComparatorStep.get(fileName))
+                //comparation before CRUD operations
+                .start(databaseClientsToCSVStep.get(jobFilePaths.getMysqlClientsBeforeLoad()))
+                .next(csvComparatorStep.get(jobFilePaths.getMysqlClientsBeforeLoad(),jobFilePaths.getDb2ClientsBeforeLoad(), jobFilePaths.getClientsReportBeforeLoad()))
+                .next(databaseContractsToCSVStep.get(jobFilePaths.getMysqlContractsBeforeLoad()))
+                .next(csvComparatorStep.get(jobFilePaths.getMysqlContractsBeforeLoad(),jobFilePaths.getDb2ContractsBeforeLoad(), jobFilePaths.getContractsReportBeforeLoad()))
+                //CRUD operations
+
+                .next(moveTranslatedFileStep.get(jobFilePaths.getInputBinaryLocation(), jobFilePaths.getInputTransformedLocation()))
+                .next(crudOperationStep.get(jobFilePaths.getInputTransformedLocation()))
+                //comparation after CRUD operations
+                .next(databaseClientsToCSVStep.get(jobFilePaths.getMysqlClientsAfterLoad()))
+                .next(csvComparatorStep.get(jobFilePaths.getMysqlClientsAfterLoad(),jobFilePaths.getDb2ClientsAfterLoad(), jobFilePaths.getClientsReportAfterLoad()))
+                .next(databaseContractsToCSVStep.get(jobFilePaths.getMysqlContractsAfterLoad()))
+                .next(csvComparatorStep.get(jobFilePaths.getMysqlClientsAfterLoad(),jobFilePaths.getDb2ClientsAfterLoad(), jobFilePaths.getContractsReportAfterLoad()))
                 .build();
     }
 
