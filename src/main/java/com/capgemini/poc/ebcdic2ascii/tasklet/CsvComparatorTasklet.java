@@ -42,11 +42,11 @@ public class CsvComparatorTasklet implements Tasklet {
         report.add(String.format("%s matching lines",matchingLines));
         long linesInMysqlNotFound = mySqlLines.size() - matchingLines;
         if(linesInMysqlNotFound > 0){
-            report.add(String.format("%s lines not found in mysql"));
+            report.add(String.format("%s lines not found in mysql", linesInMysqlNotFound));
         }
         long linesIndb2NotFound = db2Lines.size() - matchingLines;
         if(linesIndb2NotFound > 0){
-            report.add(String.format("%s lines not found in db2"));
+            report.add(String.format("%s lines not found in db2", linesIndb2NotFound));
         }
         return report;
     }
@@ -61,7 +61,7 @@ public class CsvComparatorTasklet implements Tasklet {
         BufferedWriter writer = new BufferedWriter(new FileWriter(reportFile));
 
         for(String line: myDb2Lines){
-            writer.write(line);
+            writer.write(line+System.lineSeparator());
         }
 
         writer.close();

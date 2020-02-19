@@ -25,9 +25,6 @@ public class JobFilePathsBuilder {
     @Value("${csv.file.db2.contract.after}")
     private String db2CsvContractAfter;
 
-    @Value("${csv.file.db2.after}")
-    private String db2CsvAfter;
-
     @Value("${csv.file.mysql.location}")
     private String mysqlCsv;
 
@@ -60,10 +57,10 @@ public class JobFilePathsBuilder {
         jobFilePaths.setDb2ClientsAfterLoad(sourceLoadLocation+File.separator+db2CsvClientAfter);
         jobFilePaths.setDb2ContractsAfterLoad(sourceLoadLocation+File.separator+db2CsvContractAfter);
 
-        jobFilePaths.setClientsReportBeforeLoad(sourceTransformedLoadLocation +File.separator + "clients-report-before-load.csv");
-        jobFilePaths.setContractsReportBeforeLoad(sourceTransformedLoadLocation +File.separator + "contracts-report-before-load.csv");
-        jobFilePaths.setClientsReportAfterLoad(sourceTransformedLoadLocation +File.separator + "clients-report-after-load.csv");
-        jobFilePaths.setContractsReportAfterLoad(sourceTransformedLoadLocation +File.separator + "contracts-report-after-load.csv");
+        jobFilePaths.setClientsReportBeforeLoad(comparationReportsLocation +File.separator + "clients-report-before-load.csv");
+        jobFilePaths.setContractsReportBeforeLoad(comparationReportsLocation +File.separator + "contracts-report-before-load.csv");
+        jobFilePaths.setClientsReportAfterLoad(comparationReportsLocation +File.separator + "clients-report-after-load.csv");
+        jobFilePaths.setContractsReportAfterLoad(comparationReportsLocation +File.separator + "contracts-report-after-load.csv");
 
         return jobFilePaths;
     }
