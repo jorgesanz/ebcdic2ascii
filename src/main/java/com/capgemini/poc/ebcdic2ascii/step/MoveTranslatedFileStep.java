@@ -22,10 +22,10 @@ public class MoveTranslatedFileStep {
     @Autowired
     private GenericFormatTransformer genericFormatTransformer;
 
-    @Value("${source.location}")
+    @Value("${origin.file.location}")
     private String sourceLocation;
 
-    @Value("${target.location}")
+    @Value("${transformed.file.location}")
     private String targetLocation;
 
     public Step get(String fileName) {

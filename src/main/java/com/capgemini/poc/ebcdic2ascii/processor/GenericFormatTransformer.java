@@ -26,7 +26,7 @@ public class GenericFormatTransformer implements ItemProcessor<LineContent, Line
     private CharsetEncoder encoder;
 
 
-    public GenericFormatTransformer( @Value("${target.format}") String targetFormat, @Value("${source.format}") String sourceFormat) {
+    public GenericFormatTransformer( @Value("${transformed.file.format}") String targetFormat, @Value("${origin.file.format}") String sourceFormat) {
         Charset charset_in = Charset.forName(targetFormat);
         Charset charset_out = Charset.forName(sourceFormat);
         this.decoder = charset_out.newDecoder();

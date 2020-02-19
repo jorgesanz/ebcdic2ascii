@@ -1,12 +1,10 @@
 package com.capgemini.poc.ebcdic2ascii.step;
 
 import com.capgemini.poc.ebcdic2ascii.dto.LineContent;
-import com.capgemini.poc.ebcdic2ascii.entity.Client;
 import com.capgemini.poc.ebcdic2ascii.processor.CrudOperationTransformer;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.item.database.HibernateItemWriter;
-import org.springframework.batch.item.database.JpaItemWriter;
+import org.springframework.batch.item.support.ClassifierCompositeItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 
 import static com.capgemini.poc.ebcdic2ascii.reader.ItemReaderFromFileName.getItemReaderFromFileName;
-import static com.capgemini.poc.ebcdic2ascii.writer.WriterFromLineContentSupplier.getFlatFileItemWriter;
 
 @Component
 public class CrudOperationStep {
@@ -25,14 +22,17 @@ public class CrudOperationStep {
     @Autowired
     private CrudOperationTransformer crudOperationTransformer;
 
+//    @Autowired
+//    private JpaItemWriter<Client> itemWriter;
+
     @Autowired
-    private JpaItemWriter<Client> itemWriter;
+    private ClassifierCompositeItemWriter classifierCompositeItemWriter;
 
 
-    @Value("${source.location}")
+    @Value("${origin.file.location}")
     private String sourceLocation;
 
-    @Value("${target.location}")
+    @Value("${transformed.file.location}")
     private String targetLocation;
 
     public Step get(String fileName) {
@@ -41,7 +41,7 @@ public class CrudOperationStep {
                 .<LineContent, LineContent>chunk(10)
                 .reader(getItemReaderFromFileName(targetLocation + File.separator +fileName))
                 .processor(crudOperationTransformer)
-                .writer(itemWriter)
+                .writer(classifierCompositeItemWriter)
                 .build();
     }
 

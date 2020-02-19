@@ -32,3 +32,11 @@ mvnw
 mvnw.cmd
 
 .mvn
+
+.classpath
+
+.project
+
+.settings/
+
+bin/
