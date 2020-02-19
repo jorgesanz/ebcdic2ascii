@@ -23,6 +23,7 @@ import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.core.MessageSource;
 import org.springframework.integration.file.FileReadingMessageSource;
+import org.springframework.integration.file.filters.SimplePatternFileListFilter;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.persistence.EntityManager;
@@ -45,7 +46,7 @@ public class BatchIntegrationConfig {
     public MessageSource<File> fileReadingMessageSource() {
         FileReadingMessageSource source = new FileReadingMessageSource();
         source.setDirectory(new File(ftpUploadDir));
-//        source.setFilter(new SimplePatternFileListFilter("*.ebcdic"));
+        source.setFilter(new SimplePatternFileListFilter("Fentrada"));
         source.setScanEachPoll(true);
         source.setUseWatchService(true);
         return source;

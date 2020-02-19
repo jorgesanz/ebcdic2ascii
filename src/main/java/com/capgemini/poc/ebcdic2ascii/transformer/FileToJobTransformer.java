@@ -74,8 +74,8 @@ public class FileToJobTransformer {
                 .next(csvComparatorStep.get(jobFilePaths.getMysqlContractsBeforeLoad(),jobFilePaths.getDb2ContractsBeforeLoad(), jobFilePaths.getContractsReportBeforeLoad()))
                 //CRUD operations
 
-                .next(moveTranslatedFileStep.get(jobFilePaths.getInputBinaryLocation(), jobFilePaths.getInputTransformedLocation()))
-                .next(crudOperationStep.get(jobFilePaths.getInputTransformedLocation()))
+//                .next(moveTranslatedFileStep.get(jobFilePaths.getInputBinaryLocation(), jobFilePaths.getInputTransformedLocation()))
+                .next(crudOperationStep.get(jobFilePaths.getInputBinaryLocation()))
                 //comparation after CRUD operations
                 .next(databaseClientsToCSVStep.get(jobFilePaths.getMysqlClientsAfterLoad()))
                 .next(csvComparatorStep.get(jobFilePaths.getMysqlClientsAfterLoad(),jobFilePaths.getDb2ClientsAfterLoad(), jobFilePaths.getClientsReportAfterLoad()))
