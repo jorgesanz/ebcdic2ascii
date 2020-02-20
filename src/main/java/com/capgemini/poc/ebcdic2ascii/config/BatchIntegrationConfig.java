@@ -41,12 +41,15 @@ public class BatchIntegrationConfig {
     @Value("${origin.file.location}")
     private String ftpUploadDir;
 
+    @Value("${origin.file.name.pattern}")
+    private String ftpUploadFileNamePattern;
+
     @Bean
     @InboundChannelAdapter(value = "fileInputChannel", poller = @Poller(fixedDelay = "1000"))
     public MessageSource<File> fileReadingMessageSource() {
         FileReadingMessageSource source = new FileReadingMessageSource();
         source.setDirectory(new File(ftpUploadDir));
-        source.setFilter(new SimplePatternFileListFilter("Fentrada"));
+        source.setFilter(new SimplePatternFileListFilter(ftpUploadFileNamePattern));
         source.setScanEachPoll(true);
         source.setUseWatchService(true);
         return source;
