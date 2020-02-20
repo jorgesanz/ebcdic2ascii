@@ -38,50 +38,6 @@ public class BatchIntegrationConfig {
     @Autowired
     EntityManagerFactory emf;
 
-    @Value("${origin.file.location}")
-    private String ftpUploadDir;
-
-    @Bean
-    @InboundChannelAdapter(value = "fileInputChannel", poller = @Poller(fixedDelay = "1000"))
-    public MessageSource<File> fileReadingMessageSource() {
-        FileReadingMessageSource source = new FileReadingMessageSource();
-        source.setDirectory(new File(ftpUploadDir));
-        source.setFilter(new SimplePatternFileListFilter("Fentrada"));
-        source.setScanEachPoll(true);
-        source.setUseWatchService(true);
-        return source;
-    }
-
-    @Bean
-    @ServiceActivator(inputChannel = "jobChannel", outputChannel = "nullChannel")
-    protected JobLaunchingMessageHandler launcher(JobLauncher jobLauncher) {
-        return new JobLaunchingMessageHandler(jobLauncher);
-    }
-
-    public JpaItemWriter<Client> clientWriter() {
-        JpaItemWriter<Client> writer = new JpaItemWriter();
-        writer.setEntityManagerFactory(emf);
-        return writer;
-    }
-
-    public JpaItemWriter<Contract> contractWriter() {
-        JpaItemWriter<Contract> writer = new JpaItemWriter();
-        writer.setEntityManagerFactory(emf);
-        return writer;
-    }
-
-    public JpaItemWriter<Contract> contractDeleter() {
-        JpaItemWriter<Contract> deleter = new JpaItemDeleter<>();
-        deleter.setEntityManagerFactory(emf);
-        return deleter;
-    }
-
-    public JpaItemWriter<Client> clientDeleter() {
-        JpaItemWriter<Client> deleter = new JpaItemDeleter<>();
-        deleter.setEntityManagerFactory(emf);
-        return deleter;
-    }
-
     @Bean
     public JpaPagingItemReader<Client> ClientReader(){
 
@@ -98,13 +54,6 @@ public class BatchIntegrationConfig {
         reader.setEntityManagerFactory(emf);
         reader.setQueryString("SELECT p from Contract p");
         return reader;
-    }
-
-    @Bean
-    public ClassifierCompositeItemWriter<CrudOperation> classifierCustomerCompositeItemWriter() throws Exception {
-        ClassifierCompositeItemWriter<CrudOperation> compositeItemWriter = new ClassifierCompositeItemWriter<>();
-        compositeItemWriter.setClassifier(new CrudOperationClassifier(new DeleteJdbcWriter(clientDeleter(), contractDeleter()), new UpsertJdbcWriter(clientWriter(),contractWriter())));
-        return compositeItemWriter;
     }
 
 }
