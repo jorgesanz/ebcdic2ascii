@@ -65,7 +65,7 @@ public class BatchIntegrationConfig {
     private JobCompletionNotificationListener listener;
 
 
-
+    @Bean
     public Job transformationJob() {
 
         JobFilePaths jobFilePaths = jobFilePathsBuilder.get();
