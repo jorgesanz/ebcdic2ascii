@@ -41,8 +41,8 @@ public class CrudOperationTransformer implements ItemProcessor<LineContent, Crud
         contract.setIdeZonaFactn(content.substring(ENT_IDE_ZONA_FAC_FIRST_POS, ENT_IDE_ZONA_FAC_FIRST_POS+ENT_IDE_ZONA_FAC_LENGTH));
         contract.setCodSegmento(content.substring(ENT_COD_SEGMENTO_FIRST_POS,ENT_COD_SEGMENTO_FIRST_POS+ENT_COD_SEGMENTO_LENGTH));
         contract.setTipOrgInterna(content.substring(ENT_TIP_ORG_INTE_FIRST_POS, ENT_TIP_ORG_INTE_FIRST_POS+ENT_TIP_ORG_INTE_LENGTH));
-//        contract.setCodOrganInter(content.substring(ENT_COD_ORGAN_IN_FIRST_POS, ENT_COD_ORGAN_IN_FIRST_POS+ENT_COD_ORGAN_IN_LENGTH));
-//        contract.setCodCnae(content.substring(ENT_COD_CNAE_FIRST_POS, ENT_COD_CNAE_FIRST_POS+ENT_COD_CNAE_LENGTH));
+        contract.setCodOrganInter(content.substring(ENT_COD_ORGAN_IN_FIRST_POS, ENT_COD_ORGAN_IN_FIRST_POS+ENT_COD_ORGAN_IN_LENGTH));
+        contract.setCodCnae(content.substring(ENT_COD_CNAE_FIRST_POS, ENT_COD_CNAE_FIRST_POS+ENT_COD_CNAE_LENGTH));
 
 
 //        contract.setTipContrato(content.substring(ENT_TIP_CONTRATO_FIRST_POS, ENT_TIP_CONTRATO_FIRST_POS+ENT_TIP_CONTRATO_LENGTH));
