@@ -32,14 +32,14 @@ public class JobFilePathsBuilder {
 
         JobFilePaths jobFilePaths = new JobFilePaths();
 
-        jobFilePaths.setMysqlClients(csvExportLocation + File.separator + "clients-after-load.csv");
-        jobFilePaths.setMysqlContracts(csvExportLocation + File.separator + "contracts-after-load.csv");
+        jobFilePaths.setMysqlClients(csvExportLocation + File.separator + "clients.csv");
+        jobFilePaths.setMysqlContracts(csvExportLocation + File.separator + "contracts.csv");
 
         jobFilePaths.setDb2Clients(sourceLoadLocation+File.separator+db2CsvClientAfter);
         jobFilePaths.setDb2Contracts(sourceLoadLocation+File.separator+db2CsvContractAfter);
 
-        jobFilePaths.setClientsReport(comparationReportsLocation +File.separator + "clients-report-after-load.csv");
-        jobFilePaths.setContractsReport(comparationReportsLocation +File.separator + "contracts-report-after-load.csv");
+        jobFilePaths.setClientsReport(comparationReportsLocation +File.separator + "clients-report.csv");
+        jobFilePaths.setContractsReport(comparationReportsLocation +File.separator + "contracts-report.csv");
 
         return jobFilePaths;
     }
