@@ -2,82 +2,99 @@ package com.capgemini.poc.ebcdic2ascii.entity;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
+@Table(name = "CONTRATO")
 @Data
 public class Contract implements Serializable {
 
-	@Id
-//    15 ENT-COD-CONTRATO      S9(9).     10 posiciones
+
+    //    15 ENT_COD_CONTRATO      S9(9).     10 posiciones
+    @Id
+    @Column(name = "COD_CONTRATO")
     private String codContrato;
 
-//           15 ENT-COD-CLIENTE       X(8).       8 posiciones
+    //           15 ENT_COD_CLIENTE       X(8).       8 posiciones
+    @Column(name = "COD_CLIENTE")
     private String codCliente;
 
-//           15 ENT-COD-PROVINCIA     S9(4).      5 posiciones
+    //           15 ENT_COD_PROVINCIA     S9(4).      5 posiciones
+    @Column(name = "COD_PROVINCIA")
     private String codProvincia;
 
-//           15 ENT-COD-POBLACION     S9(9).     10 posiciones
+    //           15 ENT_COD_POBLACION     S9(9).     10 posiciones
+    @Column(name = "COD_POBLACION")
     private String codPoblacion;
 
-//           15 ENT-COD-CALLE         S9(9).     10 posiciones
+    //           15 ENT_COD_CALLE         S9(9).     10 posiciones
+    @Column(name = "COD_CALLE")
     private String codCalle;
 
-//           15 ENT-COD-FINCA         S9(4).      5 posiciones
+    //           15 ENT_COD_FINCA         S9(4).      5 posiciones
+    @Column(name = "COD_FINCA")
     private String codFinca;
 
-//           15 ENT-COD-PUNTO-SUMIN   S9(4).      5 posiciones
+    //           15 ENT_COD_PUNTO_SUMIN   S9(4).      5 posiciones
+    @Column(name = "COD_PUNTO_SUMIN")
     private String codPuntoSumin;
 
-//           15 ENT-NUM-PRESNN-COB    S9(4).      5 posiciones
+    //           15 ENT_NUM_PRESNN_COB    S9(4).      5 posiciones
+    @Column(name = "NUM_PRESNN_COB")
     private String numPresnn;
 
-//           15 ENT-COD-MULTIS        S9(9).     10 posiciones
+    //           15 ENT_COD_MULTIS        S9(9).     10 posiciones
+    @Column(name = "COD_MULTIS")
     private String codMultis;
 
-//           15 ENT-COD-ESTRU-MSERV   S9(4).      5 posiciones
+    //           15 ENT_COD_ESTRU_MSERV   S9(4).      5 posiciones
+    @Column(name = "COD_ESTRU_MSERV")
     private String codEstruMserv;
 
-//           15 ENT-IDE-ZONA-FACTN    X(2).       2 posiciones
+    //           15 ENT_IDE_ZONA_FACTN    X(2).       2 posiciones
+    @Column(name = "IDE_ZONA_FACTN")
     private String ideZonaFactn;
 
-//           15 ENT-COD-SEGMENTO      X(2).       2 posiciones
+    //           15 ENT_COD_SEGMENTO      X(2).       2 posiciones
+    @Column(name = "COD_SEGMENTO")
     private String codSegmento;
 
-//           15 ENT-TIP-ORG-INTERNA   X(2).       2 posiciones
+    //           15 ENT_TIP_ORG_INTERNA   X(2).       2 posiciones
+    @Column(name = "TIP_ORG_INTERNA")
     private String tipOrgInterna;
 
-//           15 ENT-COD-ORGAN-INTER   S9(4).      5 posiciones
+    //           15 ENT_COD_ORGAN_INTER   S9(4).      5 posiciones
+    @Column(name = "COD_ORGAN_INTER")
     private String codOrganInter;
 
-//           15 ENT-COD-CNAE          X(7).       7 posiciones
+    //           15 ENT_COD_CNAE          X(7).       7 posiciones
+    @Column(name = "COD_CNAE")
     private String codCnae;
 
-////           15 ENT-TIP-CONTRATO      X(2).       2 posiciones
+    ////           15 ENT_TIP_CONTRATO      X(2).       2 posiciones
     private String tipContrato;
-//
-////           15 ENT-FEC-ALTA-CONTRATO X(10).     10 posiciones
+    //
+////           15 ENT_FEC_ALTA_CONTRATO X(10).     10 posiciones
     private String fecAltaContrato;
-//
-////           15 ENT-FORMA-PAGO        X(1).       1 posiciones
+    //
+////           15 ENT_FORMA_PAGO        X(1).       1 posiciones
     private String formaPago;
-//
-////           15 ENT-COD-PAIS          X(2).       2 posiciones
+    //
+////           15 ENT_COD_PAIS          X(2).       2 posiciones
     private String codPais;
-//
-////           15 ENT-COD-POSTAL-CTO    S9(9).     10 posiciones
+    //
+////           15 ENT_COD_POSTAL_CTO    S9(9).     10 posiciones
     private String codPostalCto;
-//
-////           15 ENT-TIP-MODO-PAGO     X(3).       3 posiciones
+    //
+////           15 ENT_TIP_MODO_PAGO     X(3).       3 posiciones
     private String tipModoPago;
-//
-////           15 ENT-DES-ADI-CONTRATO  X(45).     45 posiciones
+    //
+////           15 ENT_DES_ADI_CONTRATO  X(45).     45 posiciones
     private String desAdiContrato;
-
-
 
 
 }
