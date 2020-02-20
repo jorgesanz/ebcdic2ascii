@@ -75,26 +75,26 @@ public class Contract implements Serializable {
     @Column(name = "COD_CNAE")
     private String codCnae;
 
-    ////           15 ENT_TIP_CONTRATO      X(2).       2 posiciones
-    private String tipContrato;
-    //
-////           15 ENT_FEC_ALTA_CONTRATO X(10).     10 posiciones
-    private String fecAltaContrato;
-    //
-////           15 ENT_FORMA_PAGO        X(1).       1 posiciones
-    private String formaPago;
-    //
-////           15 ENT_COD_PAIS          X(2).       2 posiciones
-    private String codPais;
-    //
-////           15 ENT_COD_POSTAL_CTO    S9(9).     10 posiciones
-    private String codPostalCto;
-    //
-////           15 ENT_TIP_MODO_PAGO     X(3).       3 posiciones
-    private String tipModoPago;
-    //
-////           15 ENT_DES_ADI_CONTRATO  X(45).     45 posiciones
-    private String desAdiContrato;
+//    ////           15 ENT_TIP_CONTRATO      X(2).       2 posiciones
+//    private String tipContrato;
+//    //
+//////           15 ENT_FEC_ALTA_CONTRATO X(10).     10 posiciones
+//    private String fecAltaContrato;
+//    //
+//////           15 ENT_FORMA_PAGO        X(1).       1 posiciones
+//    private String formaPago;
+//    //
+//////           15 ENT_COD_PAIS          X(2).       2 posiciones
+//    private String codPais;
+//    //
+//////           15 ENT_COD_POSTAL_CTO    S9(9).     10 posiciones
+//    private String codPostalCto;
+//    //
+//////           15 ENT_TIP_MODO_PAGO     X(3).       3 posiciones
+//    private String tipModoPago;
+//    //
+//////           15 ENT_DES_ADI_CONTRATO  X(45).     45 posiciones
+//    private String desAdiContrato;
 
 
 }
