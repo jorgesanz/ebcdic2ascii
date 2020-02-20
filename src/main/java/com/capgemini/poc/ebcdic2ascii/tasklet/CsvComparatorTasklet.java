@@ -70,7 +70,6 @@ public class CsvComparatorTasklet implements Tasklet {
     private Set<String> extractLines(String file) {
         Set<String> lines = new HashSet<>();
         try (BufferedReader br = Files.newBufferedReader(Paths.get(file))) {
-            //br returns as stream and convert it into a List
             lines = br.lines().collect(Collectors.toSet());
 
         } catch (IOException e) {
