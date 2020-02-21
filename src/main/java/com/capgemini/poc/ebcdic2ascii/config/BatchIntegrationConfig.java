@@ -60,11 +60,9 @@ public class BatchIntegrationConfig {
 
 
 
-        Job job =  jobBuilderFactory.get("LOAD AND COMPARATION CSV")
+        Job job =  jobBuilderFactory.get("CSV COMPARATION")
                 .listener(listener)
-                .start(databaseClientsToCSVStep.get(jobFilePaths.getMysqlClients()))
-                .next(csvComparatorStep.get(jobFilePaths.getMysqlClients(),jobFilePaths.getDb2Clients(), jobFilePaths.getClientsReport()))
-                .next(databaseContractsToCSVStep.get(jobFilePaths.getMysqlContracts()))
+                .start(csvComparatorStep.get(jobFilePaths.getMysqlClients(),jobFilePaths.getDb2Clients(), jobFilePaths.getClientsReport()))
                 .next(csvComparatorStep.get(jobFilePaths.getMysqlContracts(),jobFilePaths.getDb2Contracts(), jobFilePaths.getContractsReport()))
                 .next(csvComparatorStep.get(jobFilePaths.getReport1(),jobFilePaths.getReport2(), jobFilePaths.getReportComparationReport()))
                 .build();
