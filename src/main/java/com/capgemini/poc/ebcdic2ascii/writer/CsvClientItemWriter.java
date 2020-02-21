@@ -1,6 +1,7 @@
 package com.capgemini.poc.ebcdic2ascii.writer;
 
 import com.capgemini.poc.ebcdic2ascii.entity.Client;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
@@ -9,10 +10,13 @@ import org.springframework.batch.item.file.transform.FieldExtractor;
 import org.springframework.batch.item.file.transform.LineAggregator;
 import org.springframework.core.io.FileSystemResource;
 
+@Slf4j
 public class CsvClientItemWriter {
 
 
     public static ItemWriter<Client> csvClientItemWriter(String exportFilePath) {
+
+        log.info("export client file set to "+exportFilePath);
         FlatFileItemWriter<Client> csvFileWriter = new FlatFileItemWriter<>();
 
         String exportFileHeader = "ENT-COD-CLIENTE;ENT-NUM-PRESNN-COB;ENT-TIP-SR-SRA-EMPRESA;ENT-NOM-TITULAR-CUENTA;ENT-NOM-APED-1-TIT-CTA X(45);ENT-NOM-APED-2-TIT-CTA;ENT-NUM-DNI-NIF-CIF-CU;ENT-TIP-DCO-IDE-TIT-CU";

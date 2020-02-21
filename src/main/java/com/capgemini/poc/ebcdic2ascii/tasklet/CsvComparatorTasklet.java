@@ -1,5 +1,6 @@
 package com.capgemini.poc.ebcdic2ascii.tasklet;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -15,6 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class CsvComparatorTasklet implements Tasklet {
 
     private String mysqlFile;
@@ -29,10 +31,15 @@ public class CsvComparatorTasklet implements Tasklet {
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws IOException {
-        Set<String> mySqlLines = extractLines(mysqlFile);
+        log.info("comparation started");
         Set<String> myDb2Lines = extractLines(db2File);
+        log.info(String.format("db2 file %s extracted", mysqlFile));
+        Set<String> mySqlLines = extractLines(mysqlFile);
+        log.info(String.format("mySql file %s extracted", mysqlFile));
         Set<String> reportLines = compareLines(mySqlLines, myDb2Lines);
+        log.info("files compared");
         writeLines(reportLines);
+        log.info("report generated in "+reportFile);
         return RepeatStatus.FINISHED;
     }
 
