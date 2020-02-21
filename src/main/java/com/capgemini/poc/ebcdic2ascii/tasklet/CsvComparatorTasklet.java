@@ -12,7 +12,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,31 +34,44 @@ public class CsvComparatorTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws IOException {
         log.info("comparation started");
-        log.info(String.format("extracting db2 file %s", db2File));
-        Set<String> myDb2Lines = extractLines(db2File);
-        log.info(String.format("db2 file %s extracted", db2File));
-        log.info(String.format("extracting mySql file %s", mysqlFile));
-        Set<String> mySqlLines = extractLines(mysqlFile);
-        log.info(String.format("mySql file %s extracted", mysqlFile));
-        Set<String> reportLines = compareLines(mySqlLines, myDb2Lines);
-        log.info("files compared");
+        List<String> mySqlLines = extractLines(mysqlFile);
+        List<String> myDb2Lines = extractLines(db2File);
+        List<String> reportLines = compareLines(mySqlLines, myDb2Lines);
         writeLines(reportLines);
-        log.info("report generated in "+reportFile);
         return RepeatStatus.FINISHED;
     }
 
-    private Set<String> compareLines(Set<String> mySqlLines, Set<String> db2Lines) {
-        Set<String> report = new HashSet<>();
-        long matchingLines = okLine(mySqlLines,db2Lines);
-        report.add(String.format("%s matching lines",matchingLines));
-        long linesInMysqlNotFound = mySqlLines.size() - matchingLines;
-        if(linesInMysqlNotFound > 0){
-            report.add(String.format("%s lines not found in mysql", linesInMysqlNotFound));
+    private List<String> compareLines(List<String> fileA, List<String> fileB) {
+        List<String> report = new ArrayList<>();
+
+        boolean sizeDifference = false;
+
+        if (fileA.size() != fileB.size()) {
+            sizeDifference = true;
+            if (fileA.size() > fileB.size())
+                report.add((fileA.size()-fileB.size())+" more lines in input file A than in input file B");
+            else
+                report.add((fileB.size()-fileA.size())+" more lines in input file A than in input file B");
         }
-        long linesIndb2NotFound = db2Lines.size() - matchingLines;
-        if(linesIndb2NotFound > 0){
-            report.add(String.format("%s lines not found in db2", linesIndb2NotFound));
+
+        if (!sizeDifference) {
+            for (int i=0; i<fileA.size();i++) {
+
+                if (!fileA.get(i).trim().equals(fileB.get(i).trim())) {
+                    report.add("File A - "+fileA.get(i));
+                    report.add("File B - "+fileB.get(i));
+                    report.add(" ");
+                }
+
+            }
+
+            if (report.size() == 0)
+                report.add("File A = File B");
+
+
         }
+
+
         return report;
     }
 
@@ -65,7 +80,7 @@ public class CsvComparatorTasklet implements Tasklet {
     }
 
 
-    private void writeLines(Set<String> myDb2Lines) throws IOException {
+    private void writeLines(List<String> myDb2Lines) throws IOException {
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(reportFile));
 
@@ -76,10 +91,10 @@ public class CsvComparatorTasklet implements Tasklet {
         writer.close();
     }
 
-    private Set<String> extractLines(String file) {
-        Set<String> lines = new HashSet<>();
+    private List<String> extractLines(String file) {
+        List<String> lines = new ArrayList<String>();
         try (BufferedReader br = Files.newBufferedReader(Paths.get(file))) {
-            lines = br.lines().collect(Collectors.toSet());
+            lines = br.lines().collect(Collectors.toList());
 
         } catch (IOException e) {
             e.printStackTrace();
