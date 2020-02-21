@@ -125,7 +125,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-		<finalName>csv-export-comparation</finalName>
+		<finalName>csv-export</finalName>
 	</build>
 
 </project>
