@@ -65,22 +65,8 @@ public class FileToJobTransformer {
 
 
         return jobBuilderFactory.get("importUserJob")
-//                .incrementer(new RunIdIncrementer())
 				.listener(listener)
-                //comparation before CRUD operations
-//                .start(databaseClientsToCSVStep.get(jobFilePaths.getMysqlClientsBeforeLoad()))
-//                .next(csvComparatorStep.get(jobFilePaths.getMysqlClientsBeforeLoad(),jobFilePaths.getDb2ClientsBeforeLoad(), jobFilePaths.getClientsReportBeforeLoad()))
-//                .next(databaseContractsToCSVStep.get(jobFilePaths.getMysqlContractsBeforeLoad()))
-//                .next(csvComparatorStep.get(jobFilePaths.getMysqlContractsBeforeLoad(),jobFilePaths.getDb2ContractsBeforeLoad(), jobFilePaths.getContractsReportBeforeLoad()))
-                //CRUD operations
-
-//                .next(moveTranslatedFileStep.get(jobFilePaths.getInputBinaryLocation(), jobFilePaths.getInputTransformedLocation()))
                 .start(crudOperationStep.get(jobFilePaths.getInputFileLocation()))
-                //comparation after CRUD operations
-                //.next(databaseClientsToCSVStep.get(jobFilePaths.getMysqlClientsAfterLoad()))
-                //.next(csvComparatorStep.get(jobFilePaths.getMysqlClientsAfterLoad(),jobFilePaths.getDb2ClientsAfterLoad(), jobFilePaths.getClientsReportAfterLoad()))
-                //.next(databaseContractsToCSVStep.get(jobFilePaths.getMysqlContractsAfterLoad()))
-                //.next(csvComparatorStep.get(jobFilePaths.getMysqlClientsAfterLoad(),jobFilePaths.getDb2ClientsAfterLoad(), jobFilePaths.getContractsReportAfterLoad()))
                 .build();
     }
 
