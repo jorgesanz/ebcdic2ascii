@@ -24,6 +24,12 @@ public class JobFilePathsBuilder {
     @Value("${origin.file.location}")
     private String sourceLoadLocation;
 
+    @Value("${report1}")
+    private String report1;
+
+    @Value("${report2}")
+    private String report2;
+
 
     @Value("${comparation.reports.location}")
     private String comparationReportsLocation;
@@ -40,6 +46,10 @@ public class JobFilePathsBuilder {
 
         jobFilePaths.setClientsReport(comparationReportsLocation +File.separator + "clients-report.csv");
         jobFilePaths.setContractsReport(comparationReportsLocation +File.separator + "contracts-report.csv");
+
+        jobFilePaths.setReport1(sourceLoadLocation+File.separator+report1);
+        jobFilePaths.setReport2(sourceLoadLocation+File.separator+report2);
+        jobFilePaths.setReportComparationReport(comparationReportsLocation +File.separator + "reports-comparation.csv");
 
         return jobFilePaths;
     }

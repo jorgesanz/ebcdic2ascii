@@ -16,4 +16,8 @@ public class JobFilePaths {
     private String clientsReport;
     private String contractsReport;
 
+    private String report1;
+    private String report2;
+    private String reportComparationReport;
+
 }

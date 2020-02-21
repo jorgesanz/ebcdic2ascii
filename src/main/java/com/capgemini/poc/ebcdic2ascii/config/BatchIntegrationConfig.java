@@ -66,6 +66,7 @@ public class BatchIntegrationConfig {
                 .next(csvComparatorStep.get(jobFilePaths.getMysqlClients(),jobFilePaths.getDb2Clients(), jobFilePaths.getClientsReport()))
                 .next(databaseContractsToCSVStep.get(jobFilePaths.getMysqlContracts()))
                 .next(csvComparatorStep.get(jobFilePaths.getMysqlContracts(),jobFilePaths.getDb2Contracts(), jobFilePaths.getContractsReport()))
+                .next(csvComparatorStep.get(jobFilePaths.getReport1(),jobFilePaths.getReport2(), jobFilePaths.getReportComparationReport()))
                 .build();
 
         JobParametersBuilder jobBuilder= new JobParametersBuilder();
