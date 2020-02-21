@@ -8,9 +8,13 @@ import com.capgemini.poc.ebcdic2ascii.listener.JobCompletionNotificationListener
 import com.capgemini.poc.ebcdic2ascii.step.CsvComparatorStep;
 import com.capgemini.poc.ebcdic2ascii.step.DatabaseClientsToCSVStep;
 import com.capgemini.poc.ebcdic2ascii.step.DatabaseContractsToCSVStep;
-import org.springframework.batch.core.Job;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -44,20 +48,34 @@ public class BatchIntegrationConfig {
     @Autowired
     private JobCompletionNotificationListener listener;
 
+    @Autowired
+    private JobLauncher jobLauncher;
+
 
     @Bean
-    public Job transformationJob() {
+    public JobExecution transformationJob() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
 
         JobFilePaths jobFilePaths = jobFilePathsBuilder.get();
 
 
-        return jobBuilderFactory.get("importUserJob")
+
+
+        Job job =  jobBuilderFactory.get("LOAD AND COMPARATION CSV")
                 .listener(listener)
                 .start(databaseClientsToCSVStep.get(jobFilePaths.getMysqlClients()))
                 .next(csvComparatorStep.get(jobFilePaths.getMysqlClients(),jobFilePaths.getDb2Clients(), jobFilePaths.getClientsReport()))
                 .next(databaseContractsToCSVStep.get(jobFilePaths.getMysqlContracts()))
                 .next(csvComparatorStep.get(jobFilePaths.getMysqlContracts(),jobFilePaths.getDb2Contracts(), jobFilePaths.getContractsReport()))
                 .build();
+
+        JobParametersBuilder jobBuilder= new JobParametersBuilder();
+
+//        JobParametersBuilder jobBuilder= new JobParametersBuilder();
+        jobBuilder.addString("timestamp", String.valueOf(System.currentTimeMillis()));
+        JobParameters jobParameters =jobBuilder.toJobParameters();
+       return jobLauncher.run(job, jobParameters);
+
+
     }
 
 
