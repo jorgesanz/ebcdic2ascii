@@ -32,8 +32,10 @@ public class CsvComparatorTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws IOException {
         log.info("comparation started");
+        log.info(String.format("extracting db2 file %s", db2File));
         Set<String> myDb2Lines = extractLines(db2File);
-        log.info(String.format("db2 file %s extracted", mysqlFile));
+        log.info(String.format("db2 file %s extracted", db2File));
+        log.info(String.format("extracting mySql file %s", mysqlFile));
         Set<String> mySqlLines = extractLines(mysqlFile);
         log.info(String.format("mySql file %s extracted", mysqlFile));
         Set<String> reportLines = compareLines(mySqlLines, myDb2Lines);
