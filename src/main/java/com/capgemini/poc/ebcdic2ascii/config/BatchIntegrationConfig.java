@@ -19,7 +19,6 @@ import org.springframework.integration.config.EnableIntegration;
 
 import javax.persistence.EntityManagerFactory;
 
-@EnableIntegration
 @EnableBatchProcessing
 @Configuration
 public class BatchIntegrationConfig {
@@ -57,7 +56,7 @@ public class BatchIntegrationConfig {
                 .start(databaseClientsToCSVStep.get(jobFilePaths.getMysqlClients()))
                 .next(csvComparatorStep.get(jobFilePaths.getMysqlClients(),jobFilePaths.getDb2Clients(), jobFilePaths.getClientsReport()))
                 .next(databaseContractsToCSVStep.get(jobFilePaths.getMysqlContracts()))
-                .next(csvComparatorStep.get(jobFilePaths.getMysqlClients(),jobFilePaths.getDb2Clients(), jobFilePaths.getContractsReport()))
+                .next(csvComparatorStep.get(jobFilePaths.getMysqlContracts(),jobFilePaths.getDb2Contracts(), jobFilePaths.getContractsReport()))
                 .build();
     }
 

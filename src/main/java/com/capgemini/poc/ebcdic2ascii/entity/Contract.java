@@ -71,5 +71,5 @@ public class Contract implements Serializable {
     //           15 ENT_COD_CNAE          X(7).       7 posiciones
     @Column(name = "COD_CNAE")
     private String codCnae;
-    
+
 }

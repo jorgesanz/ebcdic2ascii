@@ -39,7 +39,7 @@ public class CsvContractItemWriter {
 
     private static FieldExtractor<Contract> createStudentFieldExtractor() {
         BeanWrapperFieldExtractor<Contract> extractor = new BeanWrapperFieldExtractor<>();
-        extractor.setNames(new String[] {"codCliente", "codContrato", "codProvincia","codPoblacion","codCalle","codFinca","codPuntoSumin","numPresnn","codMultis","codEstruMserv","ideZonaFactn","codSegmento","tipOrgInterna","codOrganInter","codCnae","tipContrato","fecAltaContrato","formaPago","codPais","codPostalCto","tipModoPago","desAdiContrato"});
+        extractor.setNames(new String[] {"codCliente", "codContrato", "codProvincia","codPoblacion","codCalle","codFinca","codPuntoSumin","numPresnn","codMultis","codEstruMserv","ideZonaFactn","codSegmento","tipOrgInterna","codOrganInter","codCnae"});
         return extractor;
     }
 }
